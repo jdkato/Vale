@@ -10,6 +10,13 @@ import (
 // we only want to lint // or /* comments in a C++ file. Multiple formats are
 // mapped to a single extension (e.g., .java -> .c) because many languages use
 // the same comment delimiters.
+//
+// Deprecated: When possible, we now use tree-sitter grammars to determine the
+// comment delimiters for a given file. See the `lint/code` package for more
+// information.
+//
+// TODO: This should be removed once we have tree-sitter grammars for all
+// languages.
 var CommentsByNormedExt = map[string]map[string]string{
 	".c": {
 		"inline":     `(?:^|\s)(?:(//.+)|(/\*.+\*/))`,
@@ -21,25 +28,10 @@ var CommentsByNormedExt = map[string]map[string]string{
 		"blockStart": `$^`,
 		"blockEnd":   `$^`,
 	},
-	".css": {
-		"inline":     `(/\*.+\*/)`,
-		"blockStart": `(/\*.*)`,
-		"blockEnd":   `(.*\*/)`,
-	},
-	".rs": {
-		"inline":     `(//.+)`,
-		"blockStart": `$^`,
-		"blockEnd":   `$^`,
-	},
 	".r": {
 		"inline":     `(#.+)`,
 		"blockStart": `$^`,
 		"blockEnd":   `$^`,
-	},
-	".py": {
-		"inline":     `(#.*)|('{3}.+'{3})|("{3}.+"{3})`,
-		"blockStart": `(?m)^((?:\s{4,})?[r]?["']{3}.*)$`,
-		"blockEnd":   `(.*["']{3})`,
 	},
 	".ps1": {
 		"inline":     `(#.+)`,
@@ -61,51 +53,42 @@ var CommentsByNormedExt = map[string]map[string]string{
 		"blockStart": `(\{-.*)`,
 		"blockEnd":   `(.*-\})`,
 	},
-	".rb": {
-		"inline":     `(#.+)`,
-		"blockStart": `(^=begin)`,
-		"blockEnd":   `(^=end)`,
-	},
-	".jl": {
-		"inline":     `(# .+)`,
-		"blockStart": `(^#=)|(^(?:@doc )?(?:raw)?["']{3}.*)`,
-		"blockEnd":   `(^=#)|(.*["']{3})`,
-	},
 }
 
 // FormatByExtension associates a file extension with its "normed" extension
 // and its format (markup, code or text).
 var FormatByExtension = map[string][]string{
-	`\.(?:[rc]?py[3w]?|[Ss][Cc]onstruct)$`:        {".py", "code"},
-	`\.(?:adoc|asciidoc|asc)$`:                    {".adoc", "markup"},
-	`\.(?:cpp|cc|c|cp|cxx|c\+\+|h|hpp|h\+\+)$`:    {".c", "code"},
-	`\.(?:cs|csx)$`:                               {".c", "code"},
-	`\.(?:clj|cljs|cljc|cljd)$`:                   {".clj", "code"},
-	`\.(?:css)$`:                                  {".css", "code"},
-	`\.(?:go)$`:                                   {".c", "code"},
-	`\.(?:html|htm|shtml|xhtml)$`:                 {".html", "markup"},
+	`\.(?:[rc]?py[3w]?|[Ss][Cc]onstruct)$`:     {".py", "code"},
+	`\.(?:adoc|asciidoc|asc)$`:                 {".adoc", "markup"},
+	`\.(?:clj|cljs|cljc|cljd)$`:                {".clj", "code"},
+	`\.(?:cpp|cc|c|cp|cxx|c\+\+|h|hpp|h\+\+)$`: {".cpp", "code"},
+	`\.(?:css)$`:                      {".css", "code"},
+	`\.(?:cs|csx)$`:                   {".c", "code"},
+	`\.(?:dita)$`:                     {".dita", "markup"},
+	`\.(?:go)$`:                       {".go", "code"},
+	`\.(?:hs)$`:                       {".hs", "code"},
+	`\.(?:html|htm|shtml|xhtml)$`:     {".html", "markup"},
+	`\.(?:java|bsh)$`:                 {".c", "code"},
+	`\.(?:jl)$`:                       {".jl", "code"},
+	`\.(?:js|jsx)$`:                   {".js", "code"},
+	`\.(?:lua)$`:                      {".lua", "code"},
+	`\.(?:md|mdown|markdown|markdn)$`: {".md", "markup"},
+	`\.(?:org)$`:                      {".org", "markup"},
+	`\.(?:php)$`:                      {".php", "code"},
+	`\.(?:pl|pm|pod)$`:                {".r", "code"},
+	`\.(?:proto)$`:                    {".proto", "code"},
+	`\.(?:ps1|psm1|psd1)$`:            {".ps1", "code"},
 	`\.(?:rb|Gemfile|Rakefile|Brewfile|gemspec)$`: {".rb", "code"},
-	`\.(?:java|bsh)$`:                             {".c", "code"},
-	`\.(?:js|jsx)$`:                               {".c", "code"},
-	`\.(?:lua)$`:                                  {".lua", "code"},
-	`\.(?:md|mdown|markdown|markdn)$`:             {".md", "markup"},
-	`\.(?:php)$`:                                  {".php", "code"},
-	`\.(?:pl|pm|pod)$`:                            {".r", "code"},
-	`\.(?:ps1|psm1|psd1)$`:                        {".ps1", "code"},
-	`\.(?:r|R)$`:                                  {".r", "code"},
-	`\.(?:rs)$`:                                   {".rs", "code"},
-	`\.(?:rst|rest)$`:                             {".rst", "markup"},
-	`\.(?:swift)$`:                                {".c", "code"},
-	`\.(?:ts|tsx)$`:                               {".c", "code"},
-	`\.(?:txt)$`:                                  {".txt", "text"},
-	`\.(?:sass|less)$`:                            {".c", "code"},
-	`\.(?:scala|sbt)$`:                            {".c", "code"},
-	`\.(?:hs)$`:                                   {".hs", "code"},
-	`\.(?:xml)$`:                                  {".xml", "markup"},
-	`\.(?:dita)$`:                                 {".dita", "markup"},
-	`\.(?:org)$`:                                  {".org", "markup"},
-	`\.(?:jl)$`:                                   {".jl", "code"},
-	`\.(?:proto)$`:                                {".c", "code"},
+	`\.(?:rs)$`:        {".rs", "code"},
+	`\.(?:rst|rest)$`:  {".rst", "markup"},
+	`\.(?:r|R)$`:       {".r", "code"},
+	`\.(?:sass|less)$`: {".c", "code"},
+	`\.(?:scala|sbt)$`: {".c", "code"},
+	`\.(?:swift)$`:     {".c", "code"},
+	`\.(?:ts|tsx)$`:    {".ts", "code"},
+	`\.(?:txt)$`:       {".txt", "text"},
+	`\.(?:xml)$`:       {".xml", "markup"},
+	`\.(?:yaml|yml)$`:  {".yml", "code"},
 }
 
 // FormatFromExt takes a file extension and returns its [normExt, format]
@@ -138,6 +121,16 @@ func getFormat(ext string) string {
 		m, _ := regexp.MatchString(r, ext)
 		if m {
 			return f[1]
+		}
+	}
+	return ""
+}
+
+func GetNormedExt(ext string) string {
+	for r, f := range FormatByExtension {
+		m, _ := regexp.MatchString(r, ext)
+		if m {
+			return f[0]
 		}
 	}
 	return ""

@@ -154,7 +154,7 @@ func NewSpelling(cfg *core.Config, generic baseCheck, path string) (Spelling, er
 }
 
 // Run performs spell-checking on the provided text.
-func (s Spelling) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (s Spelling) Run(blk nlp.Block, _ *core.File, _ *core.Config) ([]core.Alert, error) {
 	var alerts []core.Alert
 
 	txt := blk.Text

@@ -41,7 +41,7 @@ func NewReadability(_ *core.Config, generic baseCheck, path string) (Readability
 }
 
 // Run calculates the readability level of the given text.
-func (o Readability) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (o Readability) Run(blk nlp.Block, _ *core.File, _ *core.Config) ([]core.Alert, error) {
 	var grade float64
 	var alerts []core.Alert
 

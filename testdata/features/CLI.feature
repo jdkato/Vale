@@ -127,8 +127,6 @@ Feature: CLI
             stdin.py:11:3:vale.Annotations:'XXX' left in text
             stdin.py:13:16:vale.Annotations:'XXX' left in text
             stdin.py:14:14:vale.Annotations:'NOTE' left in text
-            stdin.py:17:1:vale.Annotations:'NOTE' left in text
-            stdin.py:23:1:vale.Annotations:'XXX' left in text
             stdin.py:28:5:vale.Annotations:'NOTE' left in text
             stdin.py:35:8:vale.Annotations:'NOTE' left in text
             stdin.py:37:5:vale.Annotations:'TODO' left in text

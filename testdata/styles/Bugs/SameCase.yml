@@ -1,0 +1,9 @@
+extends: substitution
+ignorecase: true
+level: warning
+message: Use '%s' instead of '%s'
+action:
+  name: replace
+swap:
+  MPL: MPL
+  MPL[ -]?2(?:\.0)?: MPL 2.0

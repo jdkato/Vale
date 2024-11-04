@@ -103,6 +103,9 @@ func (l *Linter) lintHTMLTokens(f *core.File, raw []byte, offset int) error { //
 			walker.append(txt)
 			if !inBlock && txt != "" {
 				skipClass = checkClasses(parentClass, skipClasses)
+				if walker.isNestedList() && !inline {
+					txt = " " + txt
+				}
 				txt, skip = clean(txt, attr, skip || skipClass, inline)
 				buf.WriteString(txt)
 			}
@@ -223,13 +226,16 @@ func clean(txt, attr string, skip, inline bool) (string, bool) {
 	punct := []string{".", "?", "!", ",", ":", ";"}
 	first, _ := utf8.DecodeRuneInString(txt)
 	starter := core.StringInSlice(string(first), punct) && !skip
+
 	if skip || attr == txt {
 		txt, _ = core.Substitute(txt, txt, '*')
 		skip = false
 	}
+
 	if inline && !starter {
 		txt = " " + txt
 	}
+
 	return txt, skip
 }
 

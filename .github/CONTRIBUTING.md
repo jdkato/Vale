@@ -51,6 +51,8 @@ Prerequisites:
 * [Go](https://golang.org/) (v1.7+) installed.
 * [Asciidoctor](http://asciidoctor.org/) available on your `$PATH`.
 * [rst2html](http://docutils.sourceforge.net/docs/user/tools.html#rst2html-py) available on your `$PATH`. The latter is installed with both [Sphinx](http://www.sphinx-doc.org/en/stable/) and [docutils](https://pypi.python.org/pypi/docutils).
+* [xsltproc](http://xmlsoft.org/xslt/xsltproc.html) available on your `$PATH`.
+* [dita](https://www.dita-ot.org/download) available on your `$PATH` (v3.6+).
 
 ```bash
 $ gem install bundler:2.2.31 # if necessary

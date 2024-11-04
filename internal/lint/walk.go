@@ -178,6 +178,34 @@ func (w *walker) lastTag() string {
 	return w.activeTag
 }
 
+// isNestedList checks if we're currently inside a nested list.
+//
+// For example, the following HTML:
+//
+// ```
+//
+//	<ul>
+//	  <li>
+//	    <ol>
+//	      <li>...</li>
+//	    </ol>
+//	  </li>
+//	</ul>
+//
+// ```
+// NOTE: We need to do this to ensure that, when we're linting a list item, we
+// prepend a space to the item before conatenating it with the previous.
+func (w *walker) isNestedList() bool {
+	if w.lastTag() == "li" && len(w.tagHistory) > 3 {
+		up1 := w.tagHistory[len(w.tagHistory)-2]
+		up2 := w.tagHistory[len(w.tagHistory)-3]
+		if up1 == "ol" || up1 == "ul" {
+			return up2 == "li"
+		}
+	}
+	return false
+}
+
 func string2ByteSlice(str string) []byte {
 	if str == "" {
 		return nil

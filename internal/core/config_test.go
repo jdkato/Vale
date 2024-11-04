@@ -67,7 +67,7 @@ func TestFindAssetDefault(t *testing.T) {
 	}
 	target := filepath.Join(expected, "tmp.tmpl")
 
-	err = os.WriteFile(target, []byte{}, os.ModePerm)
+	err = os.WriteFile(target, []byte{}, 0600)
 	if err != nil {
 		t.Fatal("Failed to create file", err)
 	}
@@ -105,7 +105,7 @@ func TestFallbackToDefault(t *testing.T) {
 	}
 	target := filepath.Join(expected, "tmp.tmpl")
 
-	err = os.WriteFile(target, []byte{}, os.ModePerm)
+	err = os.WriteFile(target, []byte{}, 0600)
 	if err != nil {
 		t.Fatal("Failed to create file", err)
 	}

@@ -27,3 +27,7 @@ Metadata for this one purpose is valid.
 Metadata for this one two purpose is valid.
 
 Metadata for this purpose is valid.
+
+We improved the system using new algorithms.
+
+If you are using the ElasticSearch log store do nothing.

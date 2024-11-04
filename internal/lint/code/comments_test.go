@@ -50,7 +50,7 @@ func TestComments(t *testing.T) {
 		markup := toJSON(comments)
 		if markup != string(b2) {
 			bin := filepath.Join(binDir, fmt.Sprintf("%d.json", i))
-			_ = os.WriteFile(bin, []byte(markup), os.ModePerm)
+			_ = os.WriteFile(bin, []byte(markup), 0600)
 			t.Errorf("%s", markup)
 		}
 	}

@@ -103,3 +103,69 @@ This is a sentance of.
 <!-- vale demo.Raw = NO -->
 
 Internal Links [must not use `.html`](../index.html)
+
+<!-- vale vale = off -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale demo = off -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale vale = on -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale demo = on -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale vale = NO -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale demo = NO -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale vale = YES -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale demo = YES -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale style = vale -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale style = demo -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.
+
+<!-- vale styles = vale, demo -->
+
+This is some text ACT test. This is a sentence for.
+
+This is a sentance of.

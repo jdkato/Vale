@@ -1,35 +1,87 @@
+env:
+  - CGO_ENABLED=1
+
 builds:
-  - env:
-      - CGO_ENABLED=0
+  - id: vale-darwin-amd64
     main: ./cmd/vale
     binary: vale
+    goarch:
+      - amd64
     goos:
       - darwin
-      - linux
-      - windows
+    env:
+      - CC=o64-clang
+      - CXX=o64-clang++
+    flags:
+      - -trimpath
+
+  - id: vale-darwin-arm64
+    main: ./cmd/vale
+    binary: vale
     goarch:
-      - 386
-      - amd64
       - arm64
+    goos:
+      - darwin
+    env:
+      - CC=oa64-clang
+      - CXX=oa64-clang++
+    flags:
+      - -trimpath
+
+  - id: vale-linux-amd64
+    main: ./cmd/vale
+    binary: vale
+    goarch:
+      - amd64
+    goos:
+      - linux
+    env:
+      - CC=x86_64-linux-gnu-gcc
+      - CXX=x86_64-linux-gnu-g++
+    flags:
+      - -trimpath
+
+  - id: vale-linux-arm64
+    main: ./cmd/vale
+    binary: vale
+    goarch:
+      - arm64
+    goos:
+      - linux
+    env:
+      - CC=aarch64-linux-gnu-gcc
+      - CXX=aarch64-linux-gnu-g++
+    flags:
+      - -trimpath
+
+  - id: vale-windows-amd64
+    main: ./cmd/vale
+    binary: vale
+    goarch:
+      - amd64
+    goos:
+      - windows
+    env:
+      - CC=x86_64-w64-mingw32-gcc
+      - CXX=x86_64-w64-mingw32-g++
+    flags:
+      - -trimpath
+      - -buildmode=exe
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+      - -extldflags=-static
 
 archives:
   - format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
-    replacements:
-      amd64: 64-bit
-      darwin: macOS
-      linux: Linux
-      windows: Windows
-    # name_template: >-
-    #   {{ .ProjectName }}_
-    #   {{ .Version }}_
-    #   {{- if eq .Os "darwin" }}macOS_
-    #   {{- else }}{{- title .Os }}_{{ end }}
-    #   {{- if eq .Arch "amd64" }}64-bit
-    #   {{- else if eq .Arch "386" }}i386
-    #   {{- else }}{{ .Arch }}{{ end }}
+    name_template: >-
+      vale_{{ .Version }}_
+      {{- if eq .Os "darwin" }}macOS_
+      {{- else }}{{- title .Os }}_{{ end }}
+      {{- if eq .Arch "amd64" }}64-bit
+      {{- else }}{{ .Arch }}{{ end }}
 
 chocolateys:
   - # Your app's package name.

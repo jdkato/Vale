@@ -11,3 +11,5 @@ is given here. Bitwise `&`, `|` and `^` applied to boolean arguments are
 equivalent to logical `&&`, `||` and `!=` evaluated in non-lazy fashion.
 
 To create an OpenSearch cluster we’ll use the `Aiven command line interface <https://github.com/aiven/aiven-client>`_ . To install and set it up follow the instructions in `its GitHub page <https://github.com/aiven/aiven-client/>`_. However, if you prefer a visual interface, we also have a `web-based console <https://console.aiven.io/>`_ which you can use instead. Read the :doc:`getting started guide <../getting-started>` for more information.
+
+Sometimes did did is okay.

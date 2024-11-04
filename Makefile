@@ -1,9 +1,18 @@
-LAST_TAG=$(shell git describe --abbrev=0 --tags)
-CURR_SHA=$(shell git rev-parse --verify HEAD)
+PACKAGE_NAME          := github.com/errata-ai/vale/v3
+GOLANG_CROSS_VERSION  ?= v0.2.0
 
-LDFLAGS=-ldflags "-s -w -X main.version=$(LAST_TAG)"
+SYSROOT_DIR     ?= sysroots
+SYSROOT_ARCHIVE ?= sysroots.tar.bz2
 
-.PHONY: data test lint install rules setup bench compare release
+LAST_TAG := $(shell git describe --abbrev=0 --tags)
+CURR_SHA := $(shell git rev-parse --verify HEAD)
+
+LDFLAGS := -ldflags "-s -w -X main.version=$(LAST_TAG)"
+
+DOCKER_BUILD_TARGETS := linux/arm64,linux/amd64
+DOCKER_USER  ?= jdkato
+
+.PHONY: data test lint install rules setup bench compare release choco-cross
 
 all: build
 
@@ -47,12 +56,33 @@ test:
 	cd testdata && cucumber --format progress && cd -
 
 docker:
-	docker login -u jdkato -p ${DOCKER_PASS}
+	@echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+
+	# Ignore command failure
+	-docker buildx create \
+		--name container-builder \
+		--driver docker-container \
+		--use --bootstrap
+
 	docker buildx build \
-	--build-arg ltag=${LAST_TAG} \
-	--platform=linux/amd64,linux/arm64 \
-	--file Dockerfile \
-	--tag jdkato/vale:${LAST_TAG} \
-	--tag jdkato/vale:latest \
-	--push \
-	.
+		--build-arg ltag=${LAST_TAG} \
+		--platform=${DOCKER_BUILD_TARGETS} \
+		--file Dockerfile \
+		--tag ${DOCKER_USER}/vale:${LAST_TAG} \
+		--tag ${DOCKER_USER}/vale:latest \
+		--push \
+		.
+
+	docker buildx rm container-builder #Tidy up
+
+choco-cross:
+	@docker run \
+		--rm \
+		-e CGO_ENABLED=1 \
+		--env-file .release-env \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v `pwd`:/go/src/$(PACKAGE_NAME) \
+		-v `pwd`/sysroot:/sysroot \
+		-w /go/src/$(PACKAGE_NAME) \
+		jdkato/choco-cross:${GOLANG_CROSS_VERSION} \
+		release --clean

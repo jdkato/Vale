@@ -61,7 +61,7 @@ func fetch(src, dst string) error {
 
 	if err != nil {
 		return err
-	} else if resp.StatusCode != 200 {
+	} else if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("could not fetch '%s' (status code '%d')", src, resp.StatusCode)
 	}
 

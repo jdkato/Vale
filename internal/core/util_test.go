@@ -9,7 +9,7 @@ import (
 func TestFormatFromExt(t *testing.T) {
 	extToFormat := map[string][]string{
 		".py":    {".py", "code"},
-		".cxx":   {".c", "code"},
+		".cxx":   {".cpp", "code"},
 		".mdown": {".md", "markup"},
 	}
 	m := map[string]string{}

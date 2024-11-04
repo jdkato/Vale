@@ -25,6 +25,7 @@ type Substitution struct {
 	Vocab      bool
 	Capitalize bool
 
+	msgMap []string
 	// Deprecated
 	POS string
 }
@@ -63,24 +64,16 @@ func NewSubstitution(cfg *core.Config, generic baseCheck, path string) (Substitu
 
 	replacements := []string{}
 	for _, regexstr := range terms {
+		rule.msgMap = append(rule.msgMap, regexstr)
 		replacement := rule.Swap[regexstr]
 
 		opens := strings.Count(regexstr, "(")
 		if opens != strings.Count(regexstr, "(?")+strings.Count(regexstr, `\(`) {
-			// We rely on manually-added capture groups to associate a match
-			// with its replacement -- e.g.,
-			//
-			//    `(foo)|(bar)`, [replacement1, replacement2]
-			//
-			// where the first capture group ("foo") corresponds to the first
-			// element of the replacements slice ("replacement1"). This means
-			// that we can only accept non-capture groups from the user (the
-			// indexing would be mixed up otherwise).
-			//
-			// TODO: Should we change this? Perhaps by creating a map of regex
-			// to replacements?
-			return rule, core.NewE201FromTarget(
-				"capture group not supported; use '(?:' instead of '('", regexstr, path)
+			// We have a capture group, so we need to make it non-capturing.
+			regexstr, err = convertCaptureGroups(regexstr)
+			if err != nil {
+				return rule, core.NewE201FromTarget(err.Error(), regexstr, path)
+			}
 		}
 		tokens += `(` + regexstr + `)|`
 		replacements = append(replacements, replacement)
@@ -97,10 +90,10 @@ func NewSubstitution(cfg *core.Config, generic baseCheck, path string) (Substitu
 	return rule, nil
 }
 
-// Run executes the the `substitution`-based rule.
+// Run executes the `substitution`-based rule.
 //
 // The rule looks for one pattern and then suggests a replacement.
-func (s Substitution) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (s Substitution) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core.Alert, error) {
 	var alerts []core.Alert
 
 	txt := blk.Text
@@ -120,12 +113,13 @@ func (s Substitution) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
 					return alerts, err
 				}
 
-				// Based on the current capture group (`idx`), we can determine
-				// the associated replacement string by using the `repl` slice:
-				expected := s.repl[(idx/2)-1]
 				observed := strings.TrimSpace(converted)
+				expected, msgErr := subMsg(s, (idx/2)-1, observed)
+				if msgErr != nil {
+					return alerts, msgErr
+				}
 
-				same := matchToken(expected, observed, s.Ignorecase)
+				same := matchToken(expected, observed, false)
 				if !same && !isMatch(s.exceptRe, observed) {
 					action := s.Fields().Action
 					if action.Name == "replace" && len(action.Params) == 0 {
@@ -145,7 +139,7 @@ func (s Substitution) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
 						s.Message = convertMessage(s.Message)
 					}
 
-					a, aerr := makeAlert(s.Definition, loc, txt)
+					a, aerr := makeAlert(s.Definition, loc, txt, cfg)
 					if aerr != nil {
 						return alerts, aerr
 					}
@@ -180,4 +174,34 @@ func convertMessage(s string) string {
 		}
 	}
 	return s
+}
+
+func convertCaptureGroups(msg string) (string, error) {
+	captureOpen := regexp2.MustCompileStd(`(?<!\\)\((?!\?)`)
+	return captureOpen.Replace(msg, "(?:", -1, -1)
+}
+
+func subMsg(s Substitution, index int, observed string) (string, error) {
+	// Based on the current capture group (`idx`), we can determine
+	// the associated replacement string by using the `repl` slice:
+	expected := s.repl[index]
+	if s.Capitalize && observed == core.CapFirst(observed) {
+		expected = core.CapFirst(expected)
+	}
+
+	// TODO: Why do we need to check for this?
+	//
+	// This feels like a bug in `regexp2`.
+	hasIndex := regexp2.MustCompileStd(`\$\d+`)
+	if !hasIndex.MatchStringStd(expected) {
+		return expected, nil
+	}
+
+	msg := s.msgMap[index]
+	if s.Ignorecase {
+		msg = `(?i)` + msg
+	}
+
+	msgRe := regexp2.MustCompileStd(msg)
+	return msgRe.Replace(observed, expected, -1, -1)
 }

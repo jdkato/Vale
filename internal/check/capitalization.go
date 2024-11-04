@@ -112,7 +112,7 @@ func NewCapitalization(cfg *core.Config, generic baseCheck, path string) (Capita
 }
 
 // Run checks the capitalization style of the provided text.
-func (c Capitalization) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (c Capitalization) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core.Alert, error) {
 	alerts := []core.Alert{}
 
 	expected, matched := c.Check(blk.Text, c.exceptRe)
@@ -126,7 +126,7 @@ func (c Capitalization) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
 		}
 		pos := []int{0, nlp.StrLen(blk.Text)}
 
-		a, err := makeAlert(c.Definition, pos, blk.Text)
+		a, err := makeAlert(c.Definition, pos, blk.Text, cfg)
 		if err != nil {
 			return alerts, err
 		}

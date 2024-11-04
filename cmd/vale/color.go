@@ -64,7 +64,7 @@ func printVerboseAlert(f *core.File, wrap bool) (int, int, int) {
 	table.SetRowSeparator("")
 	table.SetAutoWrapText(!wrap)
 
-	fmt.Printf("\n %s", pterm.Underscore.Sprintf(f.Path))
+	fmt.Printf("\n %s", pterm.Underscore.Sprint(f.Path))
 	for _, a := range alerts {
 		switch a.Severity {
 		case "suggestion":

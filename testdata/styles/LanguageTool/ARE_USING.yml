@@ -1,0 +1,7 @@
+---
+extends: sequence
+level: warning
+message: Use 'by using' instead of 'using' when it follows a noun for clarity and grammatical correctness.
+tokens:
+  - tag: NN|NNP|NNPS|NNS
+  - pattern: using

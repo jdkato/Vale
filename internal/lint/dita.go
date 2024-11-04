@@ -45,7 +45,7 @@ func (l Linter) lintDITA(file *core.File) error {
 	}
 
 	targetFileName := strings.TrimSuffix(filepath.Base(file.Path), filepath.Ext(file.Path)) + ".html"
-	_ = filepath.WalkDir(tempDir, func(fp string, de os.DirEntry, err error) error {
+	_ = filepath.WalkDir(tempDir, func(fp string, de os.DirEntry, _ error) error {
 		// Find .html file, also looking in subdirectories in case an
 		// "outer" file was referenced in the DITA file, which is allowed
 		// because of the outer.control option of the dita command.

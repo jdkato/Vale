@@ -38,7 +38,7 @@ func TestGlob(t *testing.T) {
 		for _, tc := range tt.tests {
 			test := fmt.Sprintf("%s -> %s", tt.pattern, tc.query)
 			if tc.match != g.Match(tc.query) {
-				t.Errorf(test)
+				t.Error(test)
 			}
 		}
 	}

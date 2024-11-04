@@ -21,6 +21,8 @@ fixtures/formats/Sphinx/_build/
 *.sublime-workspace
 *.sublime-project
 
+.release-env
+
 # Files
 *.o
 *.a

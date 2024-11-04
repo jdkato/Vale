@@ -1,34 +1,34 @@
 [
     {
-        "Text": "\nGet all boolean input values for n variables.\n\n@example\n[ [ true, true ], [ true, false ], [ false, true ], [ false, false ] ]\ngetValues(2, [])\n\n@param   {Number} n - The number of variables.\n@param   {Array} t - The array to be recursively filled.\n\n@returns {Array} All possible input values.\n\n",
+        "Text": "\n* Get all boolean input values for n variables.\n*\n* @example\n*  [ [ true, true ], [ true, false ], [ false, true ], [ false, false ] ]\n* getValues(2, [])\n*\n* @param   {Number} n - The number of variables.\n* @param   {Array} t - The array to be recursively filled.\n*\n* @returns {Array} All possible input values.\n\n",
         "Source": "/**\n * Get all boolean input values for n variables.\n *\n * @example\n * // [ [ true, true ], [ true, false ], [ false, true ], [ false, false ] ]\n * getValues(2, [])\n *\n * @param   {Number} n - The number of variables.\n * @param   {Array} t - The array to be recursively filled.\n *\n * @returns {Array} All possible input values.\n */",
         "Line": 3,
         "Offset": 0,
         "Scope": "text.comment.block"
     },
     {
-        "Text": "\nGet all boolean values for each variable.\n\n@example\n[ { P: true }, { P: false } ]\ngetCases (['P'])\n\n@param   {Array} variables - All variables in a given statement.\n\n@returns {Array} - An array of objects mapping variables to their possible\nvalues.\n\n",
+        "Text": "\n* Get all boolean values for each variable.\n*\n* @example\n*  [ { P: true }, { P: false } ]\n* getCases (['P'])\n*\n* @param   {Array} variables - All variables in a given statement.\n*\n* @returns {Array} - An array of objects mapping variables to their possible\n*  values.\n\n",
         "Source": "/**\n * Get all boolean values for each variable.\n *\n * @example\n * // [ { P: true }, { P: false } ]\n * getCases (['P'])\n *\n * @param   {Array} variables - All variables in a given statement.\n *\n * @returns {Array} - An array of objects mapping variables to their possible\n *  values.\n */",
         "Line": 23,
         "Offset": 0,
         "Scope": "text.comment.block"
     },
     {
-        "Text": "\nConvert a statement into an object representing the structure of a table.\n\n@param   {Object} s - The statement to be converted.\n\n@returns {Object} - The table representation.\n\n",
+        "Text": "\n* Convert a statement into an object representing the structure of a table.\n*\n* @param   {Object} s - The statement to be converted.\n*\n* @returns {Object} - The table representation.\n\n",
         "Source": "/**\n * Convert a statement into an object representing the structure of a table.\n *\n * @param   {Object} s - The statement to be converted.\n *\n * @returns {Object} - The table representation.\n */",
         "Line": 51,
         "Offset": 0,
         "Scope": "text.comment.block"
     },
     {
-        "Text": "\nCreate a Markdown-formatted truth table.\n\n@param   {Object} table - The table to be converted to Markdown.\n\n@returns {String} The Markdown-formatted table.\n\n",
+        "Text": "\n* Create a Markdown-formatted truth table.\n*\n* @param   {Object} table - The table to be converted to Markdown.\n*\n* @returns {String} The Markdown-formatted table.\n\n",
         "Source": "/**\n * Create a Markdown-formatted truth table.\n *\n * @param   {Object} table - The table to be converted to Markdown.\n *\n * @returns {String} The Markdown-formatted table.\n */",
         "Line": 71,
         "Offset": 0,
         "Scope": "text.comment.block"
     },
     {
-        "Text": "\nCreate a truth table from a given statement.\n\n@param   {String} s - The statement.\n@param   {String} type - The table format.\n\n@returns {String} - The formatted table.\n\n",
+        "Text": "\n* Create a truth table from a given statement.\n*\n* @param   {String} s - The statement.\n* @param   {String} type - The table format.\n*\n* @returns {String} - The formatted table.\n\n",
         "Source": "/**\n * Create a truth table from a given statement.\n *\n * @param   {String} s - The statement.\n * @param   {String} type - The table format.\n *\n * @returns {String} - The formatted table.\n */",
         "Line": 94,
         "Offset": 0,

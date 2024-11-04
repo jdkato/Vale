@@ -1,0 +1,19 @@
+# This Deployment runs our API component
+#
+# To increase the TODO number of replicas that run,
+# change the value of the spec.replicas field.
+#
+# Always use a value higher than 1 to ensure
+# multiple replicas are running, as this
+# guarantees redundancy if one instance fails.
+kind: Deployment
+apiVersion: v1
+metadata:
+  name: api-deployment
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: api
+          image: my-app/api-server:latest # XXX: Change this to the image you want to use

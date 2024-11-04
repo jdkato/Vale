@@ -33,6 +33,10 @@ func doneMerging(curr, prev Comment) bool {
 }
 
 func addSourceLine(line string, atEnd bool) string {
+	if line == "" {
+		return "\n\n"
+	}
+
 	if !strings.HasPrefix(line, "\n") && !atEnd {
 		line = strings.TrimLeft(line, " ")
 		line = fmt.Sprintf("\n%s", line)
@@ -40,6 +44,7 @@ func addSourceLine(line string, atEnd bool) string {
 		line = strings.TrimLeft(line, " ")
 		line = fmt.Sprintf("%s\n", line)
 	}
+
 	return line
 }
 

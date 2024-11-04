@@ -1,2 +1,6 @@
+StylesPath = ../../../styles/
+
+Vocab = Rep
+
 [*]
 Vale.Repetition = YES

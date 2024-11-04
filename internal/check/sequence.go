@@ -165,14 +165,17 @@ func sequenceMatches(idx int, chk Sequence, target NLPToken, words []tag.Token) 
 					word := words[jdx-i]
 					text = append([]string{word.Text}, text...)
 
-					mat := tokensMatch(tok, word)
 					// NOTE: We have to perform this conversion because the token slice is made
 					// with the right-hand orientation in mind. For example,
 					//
 					// optional (start), optional, required (end) -> required, optional, optional
 					//
 					// (from right to left).
-					tok.optional = (tok.optional || tok.end) && !tok.start
+					if tok.Skip > 0 {
+						tok.optional = (tok.optional || tok.end) && !tok.start
+					}
+
+					mat := tokensMatch(tok, word)
 					if !mat && !tok.optional {
 						return []string{}, index
 					} else if mat && tok.optional {
@@ -222,7 +225,7 @@ func stepsToString(steps []string) string {
 }
 
 // Run looks for the user-defined sequence of tokens.
-func (s Sequence) Run(blk nlp.Block, f *core.File) ([]core.Alert, error) {
+func (s Sequence) Run(blk nlp.Block, f *core.File, _ *core.Config) ([]core.Alert, error) {
 	var alerts []core.Alert
 	var offset []string
 

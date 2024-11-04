@@ -8,12 +8,53 @@ import (
 	"strings"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/lint/code"
 	"github.com/errata-ai/vale/v3/internal/nlp"
 )
 
-// lintCode lints source code -- whether it be a markup code block, a complete
-// file, or some other portion of text.
 func (l *Linter) lintCode(f *core.File) error {
+	lang, err := code.GetLanguageFromExt(f.RealExt)
+	if err != nil {
+		// No tree-sitter grammar available for this file type.
+		return l.lintCodeOld(f)
+	}
+	ignored := l.Manager.Config.IgnoredScopes
+
+	comments, err := code.GetComments([]byte(f.Content), lang)
+	if err != nil {
+		return err
+	}
+	wholeFile := f.Content
+
+	last := 0
+	for _, comment := range comments {
+		if core.StringInSlice("comment", ignored) {
+			continue
+		} else if core.StringInSlice(comment.Scope, ignored) {
+			continue
+		}
+		f.SetText(comment.Text)
+
+		err = l.lintLines(f)
+		if err != nil {
+			return err
+		}
+
+		size := len(f.Alerts)
+		if size != last {
+			f.Alerts = adjustAlerts(f.Alerts, last, comment, lang)
+		}
+		last = size
+	}
+
+	f.SetText(wholeFile)
+	return nil
+}
+
+// lintCodeOld lints source code by analyzing its comments.
+//
+// Deprecated: we now use tree-sitter to parse code and collect comments.
+func (l *Linter) lintCodeOld(f *core.File) error {
 	var line, match, txt string
 	var lnLength, padding int
 	var block bytes.Buffer

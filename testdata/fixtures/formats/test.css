@@ -1,0 +1,8 @@
+/* TODO: This is a single-line comment */
+p {
+  color: red;
+} 
+
+p {
+  color: red;  /* XXX: Set text color to red */
+}

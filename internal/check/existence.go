@@ -69,12 +69,12 @@ func NewExistence(cfg *core.Config, generic baseCheck, path string) (Existence, 
 	return rule, nil
 }
 
-// Run executes the the `existence`-based rule.
+// Run executes the `existence`-based rule.
 //
 // This is simplest of the available extension points: it looks for any matches
 // of its internal `pattern` (calculated from `NewExistence`) against the
 // provided text.
-func (e Existence) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (e Existence) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core.Alert, error) {
 	alerts := []core.Alert{}
 
 	for _, loc := range e.pattern.FindAllStringIndex(blk.Text, -1) {
@@ -85,7 +85,7 @@ func (e Existence) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
 
 		observed := strings.TrimSpace(converted)
 		if !isMatch(e.exceptRe, observed) {
-			a, erra := makeAlert(e.Definition, loc, blk.Text)
+			a, erra := makeAlert(e.Definition, loc, blk.Text, cfg)
 			if erra != nil {
 				return alerts, erra
 			}

@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/pterm/pterm"
 	"github.com/spf13/pflag"
+	"golang.org/x/exp/maps"
 
 	"github.com/errata-ai/vale/v3/internal/core"
 )
@@ -105,10 +107,13 @@ func init() {
 		table.Render()
 		table.ClearRows()
 
+		commandKeys := maps.Keys(commandInfo)
+		slices.Sort(commandKeys)
+
 		fmt.Println(pterm.Bold.Sprintf("Commands:"))
-		for cmd, use := range commandInfo {
+		for _, cmd := range commandKeys {
 			if !core.StringInSlice(cmd, hidden) {
-				table.Append([]string{toCodeStyle(cmd), use})
+				table.Append([]string{toCodeStyle(cmd), commandInfo[cmd]})
 			}
 		}
 		table.Render()

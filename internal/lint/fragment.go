@@ -16,7 +16,7 @@ func findLine(s string, line int) string {
 	return lines[line-1]
 }
 
-func leadingSpaces(line string) int {
+func leadingSpaces(line string, offset int) int {
 	spaces := 0
 	for _, r := range line {
 		if r == ' ' {
@@ -25,7 +25,7 @@ func leadingSpaces(line string) int {
 			break
 		}
 	}
-	return spaces
+	return spaces - offset
 }
 
 func adjustAlerts(alerts []core.Alert, last int, comment code.Comment, lang *code.Language) []core.Alert {
@@ -34,8 +34,8 @@ func adjustAlerts(alerts []core.Alert, last int, comment code.Comment, lang *cod
 			line := findLine(comment.Source, alerts[i].Line)
 
 			padding := lang.Padding(line)
-			if comment.Offset == 0 && strings.HasPrefix(line, " ") {
-				padding += leadingSpaces(line)
+			if strings.HasPrefix(line, " ") {
+				padding += leadingSpaces(line, comment.Offset)
 			}
 
 			alerts[i].Line += comment.Line - 1

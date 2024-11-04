@@ -21,3 +21,9 @@ The Mutual TLS is a good practice. VNIC is another word.
 Javascript is a programming language. I developed a javascript application.
 
 IOS is a mobile operating system.
+
+mpl 2.0
+
+MPL2.0
+
+MPL 2.0

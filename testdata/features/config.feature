@@ -180,7 +180,7 @@ Feature: Config
         Then the output should contain exactly:
             """
             test.md:1:11:vale.Editorializing:Consider removing 'very'
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:write-good.Weasel:'Very' is a weasel word!
             """
         And the exit status should be 1
@@ -205,7 +205,7 @@ Feature: Config
         Then the output should contain exactly:
             """
             test.md:1:11:vale.Editorializing:Consider removing 'very'
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             """
         And the exit status should be 1
 
@@ -227,7 +227,7 @@ Feature: Config
         When I run vale "test.py"
         Then the output should contain exactly:
             """
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:write-good.Weasel:'Very' is a weasel word!
             """
         And the exit status should be 1
@@ -248,7 +248,7 @@ Feature: Config
         When I run vale "test.py test.md"
         Then the output should contain exactly:
             """
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:write-good.Weasel:'Very' is a weasel word!
             """
         And the exit status should be 1
@@ -269,7 +269,7 @@ Feature: Config
         When I run vale "test.py test.md"
         Then the output should contain exactly:
             """
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:write-good.Weasel:'Very' is a weasel word!
             """
         And the exit status should be 1
@@ -289,7 +289,7 @@ Feature: Config
             """
             test.md:1:11:write-good.Weasel:'very' is a weasel word!
             test.md:1:66:Joblint.TechTerms:Use 'JavaScript' instead of 'javascript'
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:write-good.Weasel:'Very' is a weasel word!
             """
         And the exit status should be 1
@@ -308,7 +308,7 @@ Feature: Config
         When I run vale "test.py"
         Then the output should contain exactly:
             """
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:vale.Editorializing:Consider removing 'Very'
             test.py:2:55:demo.Spelling:Inconsistent spelling of 'center'
             """
@@ -329,7 +329,7 @@ Feature: Config
         When I run vale "test.py"
         Then the output should contain exactly:
             """
-            test.py:1:1:write-good.ThereIs:Don't start a sentence with '# There is'
+            test.py:1:3:write-good.ThereIs:Don't start a sentence with 'There is'
             test.py:1:37:vale.Editorializing:Consider removing 'Very'
             """
         And the exit status should be 1
@@ -349,8 +349,6 @@ Feature: Config
             test.py:11:3:vale.Annotations:'XXX' left in text
             test.py:13:16:vale.Annotations:'XXX' left in text
             test.py:14:14:vale.Annotations:'NOTE' left in text
-            test.py:17:1:vale.Annotations:'NOTE' left in text
-            test.py:23:1:vale.Annotations:'XXX' left in text
             test.py:28:5:vale.Annotations:'NOTE' left in text
             test.py:35:8:vale.Annotations:'NOTE' left in text
             test.py:37:5:vale.Annotations:'TODO' left in text

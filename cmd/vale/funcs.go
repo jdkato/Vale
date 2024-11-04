@@ -22,7 +22,7 @@ func init() {
 		return pterm.Yellow(s)
 	}
 	funcs["underline"] = func(s string) string {
-		return pterm.Underscore.Sprintf(s)
+		return pterm.Underscore.Sprint(s)
 	}
 	funcs["newTable"] = func(wrap bool) *tablewriter.Table {
 		table := tablewriter.NewWriter(os.Stdout)
