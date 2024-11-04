@@ -47,7 +47,7 @@ func NewScript(cfg *core.Config, generic baseCheck, path string) (Script, error)
 }
 
 // Run executes the given script and returns its Alerts.
-func (s Script) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (s Script) Run(blk nlp.Block, _ *core.File, _ *core.Config) ([]core.Alert, error) {
 	var alerts []core.Alert
 
 	script := tengo.NewScript([]byte(s.Script))

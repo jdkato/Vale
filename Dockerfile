@@ -1,5 +1,8 @@
+# syntax=docker/dockerfile:1
+ARG GOLANG_VER=1.23
+FROM golang:${GOLANG_VER}-alpine AS build
+
 # See https://cloud.docker.com/repository/docker/jdkato/vale
-FROM --platform=$BUILDPLATFORM golang:1.21-alpine AS build
 
 # TODO: DITA / XML:
 #    openjdk11 \
@@ -10,13 +13,16 @@ FROM --platform=$BUILDPLATFORM golang:1.21-alpine AS build
 
 # Debug shell: $ docker run -it --entrypoint /bin/sh jdkato/vale -s
 
+RUN apk add build-base
+
 COPY . /app/
 WORKDIR /app
 
+ENV CGO_ENABLED=1
+
 ARG ltag
 
-RUN apk add build-base
-RUN CGO_ENABLED=1 GOOS=linux go build -ldflags "-s -w -X main.version=$ltag" -o /app/vale ./cmd/vale
+RUN go build -ldflags "-s -w -X main.version=$ltag" -o /app/vale ./cmd/vale
 
 FROM alpine
 

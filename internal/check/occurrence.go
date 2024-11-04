@@ -51,7 +51,7 @@ func NewOccurrence(_ *core.Config, generic baseCheck, path string) (Occurrence, 
 
 // Run checks the number of occurrences of a user-defined regex against a
 // certain threshold.
-func (o Occurrence) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (o Occurrence) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core.Alert, error) {
 	var a core.Alert
 	var err error
 	var alerts []core.Alert
@@ -99,7 +99,7 @@ func (o Occurrence) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
 				return alerts, nil
 			}
 
-			a, err = makeAlert(o.Definition, span, txt)
+			a, err = makeAlert(o.Definition, span, txt, cfg)
 			if err != nil {
 				return alerts, err
 			}

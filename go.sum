@@ -63,6 +63,8 @@ github.com/huandu/xstrings v1.3.3 h1:/Gcsuc1x8JVbJ9/rlye4xZnVAbEkGauT8lbebqcQws4
 github.com/huandu/xstrings v1.3.3/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/imdario/mergo v0.3.11 h1:3tnifQM4i+fbajXKBHXWEH+KvNHqojZ778UH75j3bGA=
 github.com/imdario/mergo v0.3.11/go.mod h1:jmQim1M+e3UYxmgPu/WyfjB3N3VflVyUjjjwH0dnCYA=
+github.com/jdkato/go-tree-sitter-julia v0.1.0 h1:z+6zTbd6PHMKAge7GJx9QIwPQX2NOKb4Pj5jteJvaYY=
+github.com/jdkato/go-tree-sitter-julia v0.1.0/go.mod h1:lXNEZorcvU63DcANEklLMbDRjwam4VQ44MIV1Cck0w8=
 github.com/jdkato/twine v0.10.1 h1:Jexy1dua9nRyr45AQ3Bml1nCVYq3VIi9g09MOkg2Wwk=
 github.com/jdkato/twine v0.10.1/go.mod h1:bYejIksa/MD4jxI5/o+DFxMb7Bw7JcGZDoA6ib4j+dg=
 github.com/karrick/godirwalk v1.16.1 h1:DynhcF+bztK8gooS0+NDJFrdNZjJ3gzVzC545UNA9iw=

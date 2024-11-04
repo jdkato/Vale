@@ -1,0 +1,10 @@
+---
+extends: sequence
+message: "Avoid ambiguous pronouns"
+level: warning
+ignorecase: true
+tokens:
+  - tag: NN|NNP|NNPS|NNS
+    skip: 7
+  - tag: PRP|PRP$
+    pattern: he|she|its?|they|his|her|their

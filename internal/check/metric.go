@@ -48,7 +48,7 @@ func NewMetric(_ *core.Config, generic baseCheck, path string) (Metric, error) {
 }
 
 // Run calculates the readability level of the given text.
-func (o Metric) Run(_ nlp.Block, f *core.File) ([]core.Alert, error) {
+func (o Metric) Run(_ nlp.Block, f *core.File, _ *core.Config) ([]core.Alert, error) {
 	alerts := []core.Alert{}
 	ctx := context.Background()
 

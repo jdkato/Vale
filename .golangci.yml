@@ -1,6 +1,6 @@
 run:
   timeout: 3m
-  go: "1.20"
+  go: "1.23"
 
 # This file contains only configs which differ from defaults.
 # All possible options can be found here https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
@@ -11,10 +11,6 @@ linters-settings:
 
   errcheck:
     check-type-assertions: true
-
-  funlen:
-    lines: 100
-    statements: 50
 
   gocritic:
     settings:
@@ -78,12 +74,11 @@ linters:
     - bodyclose
     - contextcheck
     - dupl
+    - dupword
     - durationcheck
     - errname
     - errorlint
     - exhaustive
-    - exportloopref
-    - funlen
     - gocritic
     - goimports
     - gomoddirectives
@@ -91,6 +86,7 @@ linters:
     - goprintffuncname
     - gosec
     - makezero
+    - mirror
     - nakedret
     - nilerr
     - nilnil
@@ -105,8 +101,10 @@ linters:
     - sqlclosecheck
     - stylecheck
     - tenv
+    - thelper
     - tparallel
     - unconvert
     - unparam
+    - usestdlibvars
     - wastedassign
     - whitespace

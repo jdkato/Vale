@@ -2,7 +2,6 @@ package lint
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -56,18 +55,12 @@ func NewLinter(cfg *core.Config) (*Linter, error) {
 // Transformations include block and token ignores, as well as some built-in
 // replacements.
 func (l *Linter) Transform(f *core.File) (string, error) {
-	switch f.NormedExt {
-	case ".adoc":
-		return l.applyPatterns(f, "\n----\n$1\n----\n", "`$1`")
-	case ".md":
-		return l.applyPatterns(f, "\n```\n$1\n```\n", "`$1`")
-	case ".rst":
-		return l.applyPatterns(f, "\n::\n\n%s\n", "``$1``")
-	case ".org":
-		return l.applyPatterns(f, orgExample, "=$1=")
-	default:
-		return f.Content, fmt.Errorf("ignore patterns are not supported in '%s' files", f.NormedExt)
+	exts := extensionConfig{
+		Normed: f.NormedExt,
+		Real:   f.RealExt,
 	}
+
+	return applyPatterns(l.Manager.Config, exts, f.Content)
 }
 
 // LintString src according to its format.
@@ -280,7 +273,7 @@ func (l *Linter) lintBlock(f *core.File, blk nlp.Block, lines, pad int, lookup b
 
 		info := chk.Fields()
 
-		alerts, err := chk.Run(blk, f)
+		alerts, err := chk.Run(blk, f, l.Manager.Config)
 		if err != nil {
 			return err
 		}
@@ -294,7 +287,7 @@ func (l *Linter) lintBlock(f *core.File, blk nlp.Block, lines, pad int, lookup b
 }
 
 func (l *Linter) shouldRun(name string, f *core.File, chk check.Rule, blk nlp.Block) bool {
-	min := l.Manager.Config.MinAlertLevel
+	minLevel := l.Manager.Config.MinAlertLevel
 	run := false
 
 	details := chk.Fields()
@@ -310,7 +303,7 @@ func (l *Linter) shouldRun(name string, f *core.File, chk check.Rule, blk nlp.Bl
 	if f.QueryComments(name) { //nolint:gocritic
 		// It has been disabled via an in-text comment.
 		return false
-	} else if core.LevelToInt[details.Level] < min {
+	} else if core.LevelToInt[details.Level] < minLevel {
 		return false
 	} else if !chkScope.Matches(blk) {
 		return false

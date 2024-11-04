@@ -34,6 +34,11 @@
 <a href="https://opencollective.com/vale/organization/3/website"><img src="https://opencollective.com/vale/organization/3/avatar.svg?avatarHeight=100"></a>
 <a href="https://opencollective.com/vale/organization/4/website"><img src="https://opencollective.com/vale/organization/4/avatar.svg?avatarHeight=100"></a>
 <a href="https://opencollective.com/vale/organization/5/website"><img src="https://opencollective.com/vale/organization/5/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/6/website"><img src="https://opencollective.com/vale/organization/6/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/7/website"><img src="https://opencollective.com/vale/organization/7/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/8/website"><img src="https://opencollective.com/vale/organization/8/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/9/website"><img src="https://opencollective.com/vale/organization/9/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/10/website"><img src="https://opencollective.com/vale/organization/10/avatar.svg?avatarHeight=100"></a>
 
 ### Other
 
@@ -139,7 +144,6 @@ The corpus IDs in the above plots&mdash;`gitlab` and `ydkjs`&mdash;correspond to
 - A [snapshot][7] of GitLab's open-source documentation (1,500 Markdown files).
 
 - A [chapter][8] from the open-source book _You Don't Know JS_.
-
 
 [1]: https://www.digitalocean.com/open-source/credits-for-projects
 [2]: https://studio.vale.sh/

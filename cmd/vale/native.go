@@ -170,11 +170,11 @@ func writeNativeConfig() (string, error) {
 		return "", err
 	}
 
-	return cfgFile, os.WriteFile(cfgFile, jsonCfg, os.ModePerm)
+	return cfgFile, os.WriteFile(cfgFile, jsonCfg, 0600)
 }
 
 func installNativeHostUnix(manifestData []byte, manifestFile string) error {
-	err := os.WriteFile(manifestFile, manifestData, os.ModePerm)
+	err := os.WriteFile(manifestFile, manifestData, 0600)
 	if err != nil {
 		return err
 	}
@@ -195,7 +195,7 @@ func installNativeHostWindows(manifestData []byte, manifestFile, browser string)
 	}
 	subdir := filepath.Join(manifestDir, manifestFile)
 
-	err = os.WriteFile(subdir, manifestData, os.ModePerm)
+	err = os.WriteFile(subdir, manifestData, 0600)
 	if err != nil {
 		return err
 	}

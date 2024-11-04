@@ -21,6 +21,18 @@ func makeSubstitution(def baseCheck) (*Substitution, error) {
 	return &rule, nil
 }
 
+func TestConvertGroups(t *testing.T) {
+	converted, err := convertCaptureGroups("change in(?: )?to the (.*) directory")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := "change in(?: )?to the (?:.*) directory"
+	if converted != expected {
+		t.Fatalf("Expected '%s', got '%s'", expected, converted)
+	}
+}
+
 func TestIsDeterministic(t *testing.T) {
 	swap := map[string]interface{}{
 		"extends":    "substitution",
@@ -42,7 +54,7 @@ func TestIsDeterministic(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		actual, err := rule.Run(nlp.NewBlock(text, text, "text"), &core.File{})
+		actual, err := rule.Run(nlp.NewBlock(text, text, "text"), &core.File{}, &core.Config{})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -73,7 +85,7 @@ func TestRegex(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	actual, err := rule.Run(nlp.NewBlock(text, text, "text"), &core.File{})
+	actual, err := rule.Run(nlp.NewBlock(text, text, "text"), &core.File{}, &core.Config{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -103,7 +115,7 @@ func TestRegexEscapedParens(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	actual, err := rule.Run(nlp.NewBlock(text, text, "text"), &core.File{})
+	actual, err := rule.Run(nlp.NewBlock(text, text, "text"), &core.File{}, &core.Config{})
 	if err != nil {
 		t.Fatal(err)
 	}

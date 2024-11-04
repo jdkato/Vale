@@ -1,4 +1,16 @@
 Feature: Comments
+
+   Scenario: MDX
+    When I test comments for ".mdx"
+    Then the output should contain exactly:
+    """
+    test.mdx:15:19:vale.Redundancy:'ACT test' is redundant
+    test.mdx:19:19:vale.Redundancy:'ACT test' is redundant
+    test.mdx:25:20:demo.Ending-Preposition:Don't end a sentence with 'of.'
+    test.mdx:77:20:demo.Ending-Preposition:Don't end a sentence with 'of.'
+    test.mdx:87:16:demo.Raw:Link "[must not use `.html`](../index.html)" must use the .md file extension.
+    """
+    
   Scenario: Markdown
     When I test comments for ".md"
     Then the output should contain exactly:
@@ -55,18 +67,18 @@ Feature: Comments
     test.rst:103:20:demo.Ending-Preposition:Don't end a sentence with 'of.'
     """
 
-  Scenario: AsciiDoc
-    When I test comments for ".adoc"
-    Then the output should contain exactly:
-    """
-    test.adoc:15:19:vale.Redundancy:'ACT test' is redundant
-    test.adoc:19:19:vale.Redundancy:'ACT test' is redundant
-    test.adoc:25:20:demo.Ending-Preposition:Don't end a sentence with 'of.'
-    """
+    Scenario: AsciiDoc
+        When I test comments for ".adoc"
+        Then the output should contain exactly:
+            """
+            test.adoc:15:19:vale.Redundancy:'ACT test' is redundant
+            test.adoc:19:19:vale.Redundancy:'ACT test' is redundant
+            test.adoc:25:20:demo.Ending-Preposition:Don't end a sentence with 'of.'
+            """
 
-  Scenario: Org Mode
-    When I test comments for ".org"
-    Then the output should contain exactly:
-    """
-    test.org:17:21:vale.Redundancy:'ACT test' is redundant
-    """
+    Scenario: Org Mode
+        When I test comments for ".org"
+        Then the output should contain exactly:
+            """
+            test.org:17:21:vale.Redundancy:'ACT test' is redundant
+            """

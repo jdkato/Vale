@@ -78,7 +78,7 @@ func NewConsistency(cfg *core.Config, generic baseCheck, path string) (Consisten
 }
 
 // Run looks for inconsistent use of a user-defined regex.
-func (o Consistency) Run(blk nlp.Block, f *core.File) ([]core.Alert, error) {
+func (o Consistency) Run(blk nlp.Block, f *core.File, cfg *core.Config) ([]core.Alert, error) {
 	alerts := []core.Alert{}
 
 	loc := []int{}
@@ -100,7 +100,7 @@ func (o Consistency) Run(blk nlp.Block, f *core.File) ([]core.Alert, error) {
 		if matches != nil && core.AllStringsInSlice(s.subs, f.Sequences) {
 			o.Name = o.Extends
 
-			a, err := makeAlert(o.Definition, loc, txt)
+			a, err := makeAlert(o.Definition, loc, txt, cfg)
 			if err != nil {
 				return alerts, err
 			}

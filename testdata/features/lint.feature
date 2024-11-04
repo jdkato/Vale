@@ -30,11 +30,7 @@ Feature: Lint
             test.jl:1:3:vale.Annotations:'NOTE' left in text
             test.jl:4:3:vale.Annotations:'NOTE' left in text
             test.jl:9:7:vale.Annotations:'NOTE' left in text
-            test.jl:16:51:vale.Annotations:'TODO' left in text
-            test.jl:19:1:vale.Annotations:'TODO' left in text
             test.jl:21:17:vale.Annotations:'NOTE' left in text
-            test.jl:29:1:vale.Annotations:'XXX' left in text
-            test.jl:41:1:vale.Annotations:'NOTE' left in text
             test.jl:47:3:vale.Annotations:'XXX' left in text
             """
 

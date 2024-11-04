@@ -58,10 +58,10 @@ func NewRepetition(cfg *core.Config, generic baseCheck, path string) (Repetition
 	return rule, nil
 }
 
-// Run executes the the `repetition`-based rule.
+// Run executes the `repetition`-based rule.
 //
 // The rule looks for repeated matches of its regex -- such as "this this".
-func (o Repetition) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
+func (o Repetition) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core.Alert, error) {
 	var curr, prev string
 	var hit bool
 	var ploc []int
@@ -98,7 +98,7 @@ func (o Repetition) Run(blk nlp.Block, _ *core.File) ([]core.Alert, error) {
 			if !strings.Contains(converted, "\n") && !isMatch(o.exceptRe, converted) {
 				floc := []int{ploc[0], loc[1]}
 
-				a, erra := makeAlert(o.Definition, floc, txt)
+				a, erra := makeAlert(o.Definition, floc, txt, cfg)
 				if erra != nil {
 					return alerts, erra
 				}

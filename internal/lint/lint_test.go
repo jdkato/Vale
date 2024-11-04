@@ -59,7 +59,9 @@ func initLinter() (*Linter, error) {
 	return NewLinter(cfg)
 }
 
-func benchmarkLint(path string, b *testing.B) {
+func benchmarkLint(b *testing.B, path string) {
+	b.Helper()
+
 	linter, err := initLinter()
 	if err != nil {
 		b.Fatal(err)
@@ -79,9 +81,9 @@ func benchmarkLint(path string, b *testing.B) {
 }
 
 func BenchmarkLintRST(b *testing.B) {
-	benchmarkLint("../../testdata/fixtures/benchmarks/bench.rst", b)
+	benchmarkLint(b, "../../testdata/fixtures/benchmarks/bench.rst")
 }
 
 func BenchmarkLintMD(b *testing.B) {
-	benchmarkLint("../../testdata/fixtures/benchmarks/bench.md", b)
+	benchmarkLint(b, "../../testdata/fixtures/benchmarks/bench.md")
 }

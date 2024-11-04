@@ -1,0 +1,10 @@
+extends: substitution
+message: "Use '%s' instead of '%s'."
+level: error
+scope: raw
+capitalize: true
+ignorecase: true
+action:
+  name: replace
+swap:
+  "change in(?: )?to the (.*) directory": change to the $1 directory

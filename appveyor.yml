@@ -4,7 +4,7 @@ clone_folder: c:\GOPATH\src\github.com\errata-ai\vale
 environment:
   GOPATH: c:\GOPATH
   GOROOT: C:\go
-  GOVERSION: 1.21.0
+  GOVERSION: 1.23.0
   # tree-sitter
   CGO_ENABLED: 1
   CC: C:\msys64\mingw64\bin\gcc.exe

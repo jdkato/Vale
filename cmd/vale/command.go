@@ -77,7 +77,7 @@ func fix(args []string, flags *core.CLIFlags) error {
 		return err
 	}
 
-	resp, err := lint.ParseAlert(alert, cfg)
+	resp, err := check.ParseAlert(alert, cfg)
 	if err != nil {
 		return err
 	}

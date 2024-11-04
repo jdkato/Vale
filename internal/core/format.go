@@ -53,11 +53,6 @@ var CommentsByNormedExt = map[string]map[string]string{
 		"blockStart": `(\{-.*)`,
 		"blockEnd":   `(.*-\})`,
 	},
-	".jl": {
-		"inline":     `(# .+)`,
-		"blockStart": `(^#=)|(^(?:@doc )?(?:raw)?["']{3}.*)`,
-		"blockEnd":   `(^=#)|(.*["']{3})`,
-	},
 }
 
 // FormatByExtension associates a file extension with its "normed" extension

@@ -227,6 +227,9 @@ func (f *File) FindLoc(ctx, s string, pad, count int, a Alert) (int, []int) {
 func (f *File) assignLoc(ctx string, blk nlp.Block, pad int, a Alert) (int, []int) {
 	loc := a.Span
 	for idx, l := range strings.SplitAfter(ctx, "\n") {
+		if loc[0] < 0 || loc[1] < 0 {
+			continue
+		}
 		// NOTE: This fixes #473, but the real issue is that `blk.Line` is
 		// wrong. This seems related to `location.go#41`, but I'm not sure.
 		//

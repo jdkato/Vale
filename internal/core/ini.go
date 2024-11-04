@@ -110,6 +110,20 @@ var syntaxOpts = map[string]func(string, *ini.Section, *Config) error{
 		cfg.BlockIgnores[label] = mergeValues(sec.Key("BlockIgnores").StringsWithShadows(","))
 		return nil
 	},
+	"CommentDelimiters": func(label string, sec *ini.Section, cfg *Config) error {
+		d := mergeValues(sec.Key("CommentDelimiters").StringsWithShadows(","))
+		if len(d) != 2 {
+			return NewE201FromTarget(
+				fmt.Sprintf("CommentDelimiters must be a comma-separated list of two delimiters, but got %v items", len(d)),
+				label,
+				cfg.Flags.Path)
+		}
+		var c [2]string
+		c[0], c[1] = d[0], d[1]
+		cfg.CommentDelimiters[label] = c
+		return nil
+
+	},
 	"TokenIgnores": func(label string, sec *ini.Section, cfg *Config) error { //nolint:unparam
 		cfg.TokenIgnores[label] = mergeValues(sec.Key("TokenIgnores").StringsWithShadows(","))
 		return nil

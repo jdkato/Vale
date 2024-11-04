@@ -58,7 +58,7 @@ func NewConditional(cfg *core.Config, generic baseCheck, path string) (Condition
 }
 
 // Run evaluates the given conditional statement.
-func (c Conditional) Run(blk nlp.Block, f *core.File) ([]core.Alert, error) {
+func (c Conditional) Run(blk nlp.Block, f *core.File, cfg *core.Config) ([]core.Alert, error) {
 	alerts := []core.Alert{}
 
 	txt := blk.Text
@@ -94,7 +94,7 @@ func (c Conditional) Run(blk nlp.Block, f *core.File) ([]core.Alert, error) {
 		if !core.StringInSlice(s, f.Sequences) && !isMatch(c.exceptRe, s) {
 			// If we've found one (e.g., "WHO") and we haven't marked it as
 			// being defined previously, send an Alert.
-			a, erra := makeAlert(c.Definition, loc, txt)
+			a, erra := makeAlert(c.Definition, loc, txt, cfg)
 			if erra != nil {
 				return alerts, erra
 			}

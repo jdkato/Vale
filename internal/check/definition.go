@@ -24,7 +24,7 @@ type FilterEnv struct {
 
 // Rule represents in individual writing construct to enforce.
 type Rule interface {
-	Run(blk nlp.Block, file *core.File) ([]core.Alert, error)
+	Run(blk nlp.Block, file *core.File, cfg *core.Config) ([]core.Alert, error)
 	Fields() Definition
 	Pattern() string
 }
@@ -182,7 +182,7 @@ func re2Loc(s string, loc []int) (string, error) {
 	return string(converted[loc[0]:loc[1]]), nil
 }
 
-func makeAlert(chk Definition, loc []int, txt string) (core.Alert, error) {
+func makeAlert(chk Definition, loc []int, txt string, cfg *core.Config) (core.Alert, error) {
 	match, err := re2Loc(txt, loc)
 	if err != nil {
 		return core.Alert{}, err
@@ -191,7 +191,24 @@ func makeAlert(chk Definition, loc []int, txt string) (core.Alert, error) {
 	a := core.Alert{
 		Check: chk.Name, Severity: chk.Level, Span: loc, Link: chk.Link,
 		Match: match, Action: chk.Action}
-	a.Message, a.Description = formatMessages(chk.Message, chk.Description, match)
+
+	if chk.Action.Name != "" {
+		repl := match
+
+		fixed, fixError := FixAlert(a, cfg)
+		if fixError != nil {
+			return core.Alert{}, fixError
+		}
+
+		if len(fixed) == 1 {
+			repl = fixed[0]
+		} else if len(fixed) > 1 {
+			repl = core.ToSentence(fixed, "or")
+		}
+		a.Message, a.Description = formatMessages(chk.Message, chk.Description, match, repl)
+	} else {
+		a.Message, a.Description = formatMessages(chk.Message, chk.Description, match)
+	}
 
 	return a, nil
 }

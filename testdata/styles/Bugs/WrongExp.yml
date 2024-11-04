@@ -1,0 +1,14 @@
+---
+extends: substitution
+message: "Use '%s' instead of '%s'."
+ignorecase: false
+level: error
+nonword: true
+action:
+  name: replace
+swap:
+  '\b(?:[Ee]\.[Gg]\.)': for example
+  '\b(?:[Ii]\.[Ee]\.)': that is
+  '\b(?:[Ee][Tt][Cc]\.)': and so on
+  '\b(?:[Vv][Ss]\.)': versus
+  '\b(?:[Vv][Ss]\s)(?!Code)': versus
