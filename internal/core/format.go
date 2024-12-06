@@ -54,7 +54,7 @@ var CommentsByNormedExt = map[string]map[string]string{
 		"blockEnd":   `(.*-\})`,
 	},
 	".zig": {
-		"inline":     `(//.+)`,
+		"inline":     `(/{2,3}.+)`,
 		"blockStart": `$^`,
 		"blockEnd":   `$^`,
 	},
