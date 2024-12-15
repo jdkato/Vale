@@ -344,7 +344,7 @@ func (l *Linter) setup() error {
 func (l *Linter) teardown() error {
 	for _, pid := range l.pids {
 		if p, err := os.FindProcess(pid); err == nil {
-			if p.Kill() != nil {
+			if err := p.Kill(); err != nil {
 				return err
 			}
 		}
