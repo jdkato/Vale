@@ -112,7 +112,7 @@ func GetComments(source []byte, lang *Language) ([]Comment, error) {
 	for _, query := range lang.Queries {
 		q, qErr := sitter.NewQuery([]byte(query), lang.Parser)
 		if qErr != nil {
-			return comments, err
+			return comments, qErr
 		}
 		comments = append(comments, engine.run(q, source)...)
 	}
