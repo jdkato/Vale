@@ -9,7 +9,7 @@ import (
 
 	"github.com/errata-ai/regexp2"
 	"github.com/mitchellh/mapstructure"
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/nlp"
