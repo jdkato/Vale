@@ -4,11 +4,11 @@ go 1.23.2
 
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/adrg/strutil v0.3.0
-	github.com/adrg/xdg v0.4.0
+	github.com/adrg/strutil v0.3.1
+	github.com/adrg/xdg v0.5.3
 	github.com/antonmedv/expr v1.12.0
-	github.com/bmatcuk/doublestar/v4 v4.6.0
-	github.com/d5/tengo/v2 v2.10.0
+	github.com/bmatcuk/doublestar/v4 v4.7.1
+	github.com/d5/tengo/v2 v2.17.0
 	github.com/errata-ai/ini v1.63.0
 	github.com/errata-ai/regexp2 v1.7.0
 	github.com/gobwas/glob v0.2.3
