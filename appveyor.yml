@@ -36,7 +36,6 @@ build_script:
   - cmd: C:\msys64\usr\bin\make.exe setup
   - cmd: C:\msys64\usr\bin\make.exe build os=windows exe=vale.exe
 test_script:
-  - cmd: ruby --version
   - cmd: C:\msys64\usr\bin\make.exe test
 # after_test:
 #   - cmd: make compare
