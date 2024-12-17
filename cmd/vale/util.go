@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -92,4 +93,39 @@ func mkdir(dir string) error {
 
 func toCodeStyle(s string) string {
 	return pterm.Fuzzy.Sprint(s)
+}
+
+func unarchive(src, dest string) error {
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	for _, file := range r.File {
+		destPath := filepath.Join(dest, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(destPath, os.ModePerm)
+			continue
+		}
+		os.MkdirAll(filepath.Dir(destPath), os.ModePerm)
+
+		outFile, err := os.Create(destPath)
+		if err != nil {
+			return err
+		}
+		defer outFile.Close()
+
+		rc, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer rc.Close()
+
+		_, err = io.Copy(outFile, rc)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

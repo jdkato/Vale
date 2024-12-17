@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mholt/archiver/v3"
 	cp "github.com/otiai10/copy"
 
 	"github.com/errata-ai/vale/v3/internal/core"
@@ -81,7 +80,7 @@ func loadLocalZipPkg(name, pkgPath, styles string, index int) error {
 		return err
 	}
 
-	if err = archiver.Unarchive(pkgPath, dir); err != nil {
+	if err = unarchive(pkgPath, dir); err != nil {
 		return err
 	}
 
