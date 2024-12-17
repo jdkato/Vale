@@ -102,27 +102,33 @@ func unarchive(src, dest string) error {
 	}
 	defer r.Close()
 
+	if err := os.MkdirAll(dest, 0755); err != nil {
+		return err
+	}
+
 	for _, file := range r.File {
 		destPath := filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
 			os.MkdirAll(destPath, os.ModePerm)
 			continue
 		}
-		os.MkdirAll(filepath.Dir(destPath), os.ModePerm)
+		if err := os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
+			return err
+		}
 
-		outFile, err := os.Create(destPath)
+		dstFile, err := os.OpenFile(destPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
 		if err != nil {
 			return err
 		}
-		defer outFile.Close()
+		defer dstFile.Close()
 
-		rc, err := file.Open()
+		srcFile, err := file.Open()
 		if err != nil {
 			return err
 		}
-		defer rc.Close()
+		defer srcFile.Close()
 
-		_, err = io.Copy(outFile, rc)
+		_, err = io.Copy(dstFile, srcFile)
 		if err != nil {
 			return err
 		}
