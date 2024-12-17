@@ -24,8 +24,8 @@ require (
 	github.com/smacker/go-tree-sitter v0.0.0-20240514083259-c5d1f3f5f99e
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.10.0
-	github.com/yuin/goldmark v1.5.6
-	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
+	github.com/yuin/goldmark v1.7.8
+	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67
 	golang.org/x/net v0.32.0
 	golang.org/x/sys v0.28.0
 	gopkg.in/yaml.v3 v3.0.1
