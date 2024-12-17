@@ -42,7 +42,7 @@ DEPENDENCIES
   aruba (~> 0.14.14)
   cucumber (~> 2.3.0)
   os (~> 0.9.6)
-  specific_install (~> 0.3.3)
+  specific_install (~> 0.3.8)
 
 BUNDLED WITH
    2.2.31
