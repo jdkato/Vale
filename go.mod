@@ -14,7 +14,6 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/jdkato/go-tree-sitter-julia v0.1.0
 	github.com/jdkato/twine v0.10.1
-	github.com/karrick/godirwalk v1.17.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/niklasfasching/go-org v1.7.0
 	github.com/olekukonko/tablewriter v0.0.5
