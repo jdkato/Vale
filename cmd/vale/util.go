@@ -102,20 +102,20 @@ func unarchive(src, dest string) error {
 	}
 	defer r.Close()
 
-	if err = os.MkdirAll(dest, 0755); err != nil {
+	if err = mkdir(dest); err != nil {
 		return err
 	}
 
 	for _, file := range r.File {
 		destPath := filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
-			err = os.MkdirAll(destPath, os.ModePerm)
+			err = mkdir(destPath)
 			if err != nil {
 				return err
 			}
 			continue
 		}
-		if err = os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
+		if err = mkdir(filepath.Dir(destPath)); err != nil {
 			return err
 		}
 
