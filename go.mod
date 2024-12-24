@@ -14,6 +14,7 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/jdkato/go-tree-sitter-julia v0.1.0
 	github.com/jdkato/twine v0.10.1
+	github.com/mholt/archives v0.0.0-20241216060121-23e0af8fe73d
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/niklasfasching/go-org v1.7.0
 	github.com/olekukonko/tablewriter v0.0.5
@@ -35,23 +36,41 @@ require (
 	github.com/MarvinJWendt/testza v0.4.2 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
+	github.com/STARRY-S/zip v0.2.1 // indirect
+	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/atomicgo/cursor v0.0.1 // indirect
+	github.com/bodgit/plumbing v1.3.0 // indirect
+	github.com/bodgit/sevenzip v1.6.0 // indirect
+	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
+	github.com/klauspost/pgzip v1.2.6 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/nwaples/rardecode/v2 v2.0.0-beta.4.0.20241112120701-034e449c6e78 // indirect
+	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
+	github.com/sorairolake/lzip-go v0.3.5 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
+	github.com/therootcompany/xz v1.0.1 // indirect
+	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/term v0.27.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/neurosnap/sentences.v1 v1.0.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
