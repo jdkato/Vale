@@ -124,15 +124,14 @@ func unarchive(src, dest string) error {
 		}
 		defer dstFile.Close()
 
-		srcFile, err := file.Open()
-		if err != nil {
-			return err
+		srcFile, er := file.Open()
+		if er != nil {
+			return er
 		}
 		defer srcFile.Close()
 
-		_, err = io.Copy(dstFile, srcFile)
-		if err != nil {
-			return err
+		if _, er = io.Copy(dstFile, srcFile); er != nil {
+			return er
 		}
 	}
 	return nil
