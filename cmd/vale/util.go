@@ -125,7 +125,7 @@ func handleFile(f archives.FileInfo, dst string) error {
 		if linkErr != nil {
 			return fmt.Errorf("invalid symlink target: %w", linkErr)
 		}
-		if linkErr := os.Symlink(targetPath, dstPath); linkErr != nil {
+		if linkErr = os.Symlink(targetPath, dstPath); linkErr != nil {
 			return fmt.Errorf("create symlink: %w", linkErr)
 		}
 		return nil
