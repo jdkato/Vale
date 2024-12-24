@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img width="75%" alt="A demo screenshot." src="https://vale.sh/images/vale/mac.png">
+  <img width="75%" alt="A demo screenshot." src="https://vale.sh/media/mac.png">
 </p>
 
 <div align="center">
