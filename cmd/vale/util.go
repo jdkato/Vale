@@ -102,7 +102,7 @@ func unarchive(src, dest string) error {
 	}
 	defer r.Close()
 
-	if err := os.MkdirAll(dest, 0755); err != nil {
+	if err = os.MkdirAll(dest, 0755); err != nil {
 		return err
 	}
 
@@ -115,7 +115,7 @@ func unarchive(src, dest string) error {
 			}
 			continue
 		}
-		if err := os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
+		if err = os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
 			return err
 		}
 
