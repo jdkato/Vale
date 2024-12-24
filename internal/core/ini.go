@@ -68,7 +68,7 @@ func loadVocab(root string, cfg *Config) error {
 		}
 		return nil
 	})
-	
+
 	return err
 }
 

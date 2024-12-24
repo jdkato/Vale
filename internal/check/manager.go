@@ -122,15 +122,15 @@ func (mgr *Manager) AssignNLP(f *core.File) nlp.Info {
 }
 
 func (mgr *Manager) addStyle(path string) error {
-    return filepath.WalkDir(path, func(fp string, d fs.DirEntry, err error) error {
-        if err != nil {
-            return err
-        }
-        if d.IsDir() {
-            return nil
-        }
-        return mgr.addRuleFromSource(d.Name(), fp)
-    })
+	return filepath.WalkDir(path, func(fp string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		return mgr.addRuleFromSource(d.Name(), fp)
+	})
 }
 
 func (mgr *Manager) addRuleFromSource(name, path string) error {

@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-
 	"github.com/spf13/pflag"
 
 	"github.com/errata-ai/vale/v3/internal/core"

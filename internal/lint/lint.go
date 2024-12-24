@@ -132,13 +132,13 @@ func (l *Linter) lintFiles(done <-chan core.File, root string) (<-chan lintResul
 			if err != nil {
 				return err
 			}
-			
+
 			if info.IsDir() && core.ShouldIgnoreDirectory(fp) {
 				return filepath.SkipDir
 			} else if info.IsDir() || l.skip(fp) {
 				return nil
 			}
-		
+
 			wg.Add()
 			go func(fp string) {
 				select {
@@ -147,7 +147,7 @@ func (l *Linter) lintFiles(done <-chan core.File, root string) (<-chan lintResul
 				}
 				wg.Done()
 			}(fp)
-		
+
 			// Abort the walk if done is closed.
 			select {
 			case <-done:
