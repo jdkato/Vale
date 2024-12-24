@@ -109,8 +109,7 @@ func unarchive(src, dest string) error {
 	for _, file := range r.File {
 		destPath := filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
-			err = mkdir(destPath)
-			if err != nil {
+			if err = mkdir(destPath); err != nil {
 				return err
 			}
 			continue
