@@ -109,7 +109,10 @@ func unarchive(src, dest string) error {
 	for _, file := range r.File {
 		destPath := filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
-			os.MkdirAll(destPath, os.ModePerm)
+			err = os.MkdirAll(destPath, os.ModePerm)
+			if err != nil {
+				return err
+			}
 			continue
 		}
 		if err := os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
