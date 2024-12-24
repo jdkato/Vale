@@ -196,7 +196,7 @@ func unarchive(src, dst string) error {
 		return fmt.Errorf("creating destination directory: %w", dirErr)
 	}
 
-	handler := func(ctx context.Context, f archives.FileInfo) error {
+	handler := func(_ context.Context, f archives.FileInfo) error {
 		return handleFile(f, dst)
 	}
 
