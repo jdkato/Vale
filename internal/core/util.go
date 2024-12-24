@@ -7,7 +7,9 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
+	"syscall"
 	"unicode"
 
 	"github.com/errata-ai/vale/v3/internal/nlp"
@@ -328,4 +330,22 @@ func ReplaceExt(fp string, formats map[string]string) string {
 	}
 
 	return fp
+}
+
+// FindProcess checks if a process with the given PID exists.
+func FindProcess(pid int) *os.Process {
+	if pid <= 0 {
+		return nil
+	}
+
+	p, err := os.FindProcess(pid)
+	if runtime.GOOS != "windows" {
+		err = p.Signal(os.Signal(syscall.Signal(0)))
+	}
+
+	if err != nil {
+		return nil
+	}
+
+	return p
 }

@@ -342,16 +342,16 @@ func (l *Linter) setup() error {
 
 func (l *Linter) teardown() error {
 	for _, pid := range l.pids {
-		if p, err := os.FindProcess(pid); err == nil {
-			if err := p.Kill(); err != nil {
-				return err
+		if p := core.FindProcess(pid); p != nil {
+			if procErr := p.Kill(); procErr != nil {
+				return procErr
 			}
 		}
 	}
 
 	for _, f := range l.temps {
-		if err := os.Remove(f.Name()); err != nil {
-			return err
+		if ferr := os.Remove(f.Name()); ferr != nil {
+			return ferr
 		}
 	}
 
