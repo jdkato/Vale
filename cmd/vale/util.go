@@ -181,7 +181,7 @@ func unarchive(src, dst string) error {
 		return fmt.Errorf("open tarball %s: %w", src, openErr)
 	}
 	defer archiveFile.Close()
-	
+
 	format, input, identifyErr := archives.Identify(context.Background(), src, archiveFile)
 	if identifyErr != nil {
 		return fmt.Errorf("identify format: %w", identifyErr)
@@ -191,7 +191,7 @@ func unarchive(src, dst string) error {
 	if !ok {
 		return fmt.Errorf("unsupported format for extraction")
 	}
-	
+
 	if dirErr := mkdir(dst); dirErr != nil {
 		return fmt.Errorf("creating destination directory: %w", dirErr)
 	}
