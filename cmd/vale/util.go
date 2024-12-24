@@ -118,20 +118,20 @@ func unarchive(src, dest string) error {
 			return err
 		}
 
-		dstFile, err := os.OpenFile(destPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
-		if err != nil {
-			return err
+		dstFile, dstErr := os.OpenFile(destPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		if dstErr != nil {
+			return dstErr
 		}
 		defer dstFile.Close()
 
-		srcFile, er := file.Open()
-		if er != nil {
-			return er
+		srcFile, srcErr := file.Open()
+		if srcErr != nil {
+			return srcErr
 		}
 		defer srcFile.Close()
 
-		if _, er = io.Copy(dstFile, srcFile); er != nil {
-			return er
+		if _, err = io.Copy(dstFile, srcFile); err != nil {
+			return err
 		}
 	}
 	return nil
