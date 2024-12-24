@@ -108,6 +108,11 @@ func unarchive(src, dest string) error {
 
 	for _, file := range r.File {
 		destPath := filepath.Join(dest, file.Name)
+		// Prevent path traversal
+		if !strings.HasPrefix(destPath, filepath.Clean(dest)+string(os.PathSeparator)) {
+			return fmt.Errorf("invalid file path: %s", file.Name)
+		}
+
 		if file.FileInfo().IsDir() {
 			if err = mkdir(destPath); err != nil {
 				return err
