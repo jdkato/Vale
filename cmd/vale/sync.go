@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,8 +11,6 @@ import (
 
 	"github.com/errata-ai/vale/v3/internal/core"
 )
-
-var library = "https://raw.githubusercontent.com/errata-ai/styles/master/library.json"
 
 func initPath(cfg *core.Config) error {
 	// The first entry is always the default `StylesPath`.
@@ -36,29 +33,13 @@ func initPath(cfg *core.Config) error {
 }
 
 func readPkg(pkg, path string, idx int) error {
-	lookup, err := getLibrary(path)
-	if err != nil {
-		return err
-	}
-
-	found := false
-	for _, entry := range lookup {
-		if pkg == entry.Name {
-			found = true
-			if err = download(pkg, entry.URL, path, idx); err != nil {
-				return err
-			}
+	if core.IsPhrase(pkg) && !core.IsDir(pkg) {
+		entry := inLibrary(pkg, path)
+		if entry != "" {
+			return download(pkg, entry, path, idx)
 		}
 	}
-
-	if !found {
-		name := fileNameWithoutExt(pkg)
-		if err = loadPkg(name, pkg, path, idx); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return loadPkg(fileNameWithoutExt(pkg), pkg, path, idx)
 }
 
 func loadPkg(name, urlOrPath, styles string, index int) error {
@@ -96,7 +77,7 @@ func download(name, url, styles string, index int) error {
 
 	if err = fetch(url, dir); err != nil {
 		if strings.Contains(err.Error(), "unsupported protocol scheme") {
-			err = fmt.Errorf("'%s' is not a valid URL or the local file doesn't exist", url)
+			err = fmt.Errorf("'%s' is not a valid URL or the directory doesn't exist", url)
 		}
 		return core.NewE100("download", err)
 	}
@@ -193,17 +174,4 @@ func moveAsset(name, old, new string) error { //nolint:predeclared
 	}
 
 	return cp.Copy(src, dst)
-}
-
-func getLibrary(_ string) ([]Style, error) {
-	styles := []Style{}
-
-	resp, err := fetchJSON(library)
-	if err != nil {
-		return styles, err
-	} else if err = json.Unmarshal(resp, &styles); err != nil {
-		return styles, err
-	}
-
-	return styles, err
 }
