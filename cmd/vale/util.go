@@ -134,7 +134,7 @@ func unarchive(src, dest string) error {
 		}
 		defer srcFile.Close()
 
-		if _, err = io.CopyN(dstFile, srcFile, 1024*1024*1024*10); err != nil {
+		if _, err = io.Copy(dstFile, io.LimitReader(srcFile, 1024*1024*1024*10)); err != nil {
 			return err
 		}
 	}
