@@ -107,7 +107,7 @@ func unarchive(src, dest string) error {
 	}
 
 	for _, file := range r.File {
-		destPath := filepath.Join(dest, file.Name)
+		destPath := filepath.Join(dest, filepath.Clean(file.Name))
 		if !strings.HasPrefix(destPath, filepath.Clean(dest)+string(os.PathSeparator)) {
 			return fmt.Errorf("invalid file path: %s", file.Name)
 		}
@@ -134,7 +134,7 @@ func unarchive(src, dest string) error {
 		}
 		defer srcFile.Close()
 
-		if _, err = io.CopyN(dstFile, srcFile, 1024*1024*1028); err != nil {
+		if _, err = io.Copy(dstFile, srcFile); err != nil {
 			return err
 		}
 	}
