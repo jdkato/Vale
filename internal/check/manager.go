@@ -272,9 +272,7 @@ func (mgr *Manager) loadVocabRules() {
 	if len(mgr.Config.AcceptedTokens) > 0 {
 		vocab := defaultRules["Terms"]
 		for _, term := range mgr.Config.AcceptedTokens {
-			if core.IsPhrase(term) {
-				vocab["swap"].(map[string]string)[strings.ToLower(term)] = term
-			}
+			vocab["swap"].(map[string]string)[strings.ToLower(term)] = term
 		}
 		if level, ok := mgr.Config.RuleToLevel["Vale.Terms"]; ok {
 			vocab["level"] = level
