@@ -68,11 +68,17 @@ func ShowError(err error, style string, out io.Writer) {
 
 		if failed != nil {
 			data = struct {
-				Code string
+				Line int
+				Path string
 				Text string
+				Code string
+				Span int
 			}{
+				Line: 0,
+				Path: "",
 				Text: core.StripANSI(err.Error()),
 				Code: "E100",
+				Span: 0,
 			}
 		} else {
 			data = struct {
