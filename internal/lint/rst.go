@@ -14,7 +14,7 @@ import (
 //
 // reCodeBlock is used to convert Sphinx-style code directives to the regular
 // `::` for rst2html, including the use of runtime options (e.g., :caption:).
-var reCodeBlock = regexp.MustCompile(`.. (?:raw|code(?:-block)?):: (?:[\w-]+)(?:\s+:\w+: .+)*`)
+var reCodeBlock = regexp.MustCompile(`\.\. (?:raw|code(?:-block)?):: *(?:[\w-]+)?(?:\s+:\w+:.*)*`)
 
 // We replace custom directives with `.. code::`.
 //
