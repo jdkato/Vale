@@ -190,6 +190,10 @@ func (l *Linter) lintFile(src string) lintResult {
 	file.NLP = l.Manager.AssignNLP(file)
 	simple := l.Manager.Config.Flags.Simple
 
+	// NOTE: This is a sanity check to ensure that we don't run any checks that
+	// we actually have a blueprint to apply.
+	hasBlueprints := len(l.Manager.Config.Blueprints) > 0
+
 	if file.Format == "markup" && !simple { //nolint:gocritic
 		switch file.NormedExt {
 		case ".adoc":
@@ -207,6 +211,8 @@ func (l *Linter) lintFile(src string) lintResult {
 		case ".org":
 			err = l.lintOrg(file)
 		}
+	} else if file.Format == "data" && !simple && hasBlueprints {
+		err = l.lintData(file)
 	} else if file.Format == "code" && !simple {
 		err = l.lintCode(file)
 	} else if file.Format == "fragment" && !simple {

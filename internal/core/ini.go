@@ -138,6 +138,10 @@ var syntaxOpts = map[string]func(string, *ini.Section, *Config) error{
 		cfg.FormatToLang[label] = sec.Key("Lang").String()
 		return nil
 	},
+	"Blueprint": func(label string, sec *ini.Section, cfg *Config) error { //nolint:unparam
+		cfg.Blueprints[label] = sec.Key("Blueprint").String()
+		return nil
+	},
 }
 
 var globalOpts = map[string]func(*ini.Section, *Config){

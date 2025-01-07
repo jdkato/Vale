@@ -1,0 +1,6 @@
+select:
+  - name: Metadata
+    query: info.description
+
+  - name: Servers
+    query: "servers.all().description"

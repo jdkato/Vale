@@ -33,13 +33,14 @@ var (
 	// PipeDir is the default location for Vale's configuration pipeline.
 	PipeDir = ".vale-config"
 
-	VocabDir  = filepath.Join(ConfigDir, "vocabularies")
-	DictDir   = filepath.Join(ConfigDir, "dictionaries")
-	TmplDir   = filepath.Join(ConfigDir, "templates")
-	IgnoreDir = filepath.Join(ConfigDir, "ignore")
-	ActionDir = filepath.Join(ConfigDir, "actions")
-	FilterDir = filepath.Join(ConfigDir, "filters")
-	ScriptDir = filepath.Join(ConfigDir, "scripts")
+	VocabDir      = filepath.Join(ConfigDir, "vocabularies")
+	DictDir       = filepath.Join(ConfigDir, "dictionaries")
+	TmplDir       = filepath.Join(ConfigDir, "templates")
+	IgnoreDir     = filepath.Join(ConfigDir, "ignore")
+	ActionDir     = filepath.Join(ConfigDir, "actions")
+	FilterDir     = filepath.Join(ConfigDir, "filters")
+	ScriptDir     = filepath.Join(ConfigDir, "scripts")
+	BlueprintsDir = filepath.Join(ConfigDir, "blueprints")
 )
 
 // ConfigDirs is a list of all directories that contain user-defined, non-style
@@ -52,6 +53,7 @@ var ConfigDirs = []string{
 	ActionDir,
 	ScriptDir,
 	FilterDir,
+	BlueprintsDir,
 }
 
 // ConfigVars is a list of all supported environment variables.
@@ -206,6 +208,7 @@ type Config struct {
 	RootINI           string                     // the path to the project's .vale.ini file
 	Paths             []string                   // A list of paths to search for styles
 	ConfigFiles       []string                   // A list of configuration files to load
+	Blueprints        map[string]string          // A map of blueprint -> path
 
 	AcceptedTokens []string `json:"-"` // Project-specific vocabulary (okay)
 	RejectedTokens []string `json:"-"` // Project-specific vocabulary (avoid)
@@ -241,6 +244,7 @@ func NewConfig(flags *CLIFlags) (*Config, error) {
 	cfg.TokenIgnores = make(map[string][]string)
 	cfg.CommentDelimiters = make(map[string][2]string)
 	cfg.FormatToLang = make(map[string]string)
+	cfg.Blueprints = make(map[string]string)
 	cfg.Paths = []string{}
 	cfg.ConfigFiles = []string{}
 
