@@ -53,6 +53,11 @@ var CommentsByNormedExt = map[string]map[string]string{
 		"blockStart": `(\{-.*)`,
 		"blockEnd":   `(.*-\})`,
 	},
+	".zig": {
+		"inline":     `(/{2,3}.+)|(//!.+)`,
+		"blockStart": `$^`,
+		"blockEnd":   `$^`,
+	},
 }
 
 // FormatByExtension associates a file extension with its "normed" extension
@@ -89,6 +94,7 @@ var FormatByExtension = map[string][]string{
 	`\.(?:txt)$`:       {".txt", "text"},
 	`\.(?:xml)$`:       {".xml", "markup"},
 	`\.(?:yaml|yml)$`:  {".yml", "code"},
+	`\.(?:zig)$`:  	    {".zig", "code"},
 }
 
 // FormatFromExt takes a file extension and returns its [normExt, format]

@@ -380,3 +380,11 @@ Feature: Lint
             test.mdx:46:3:vale.Annotations:'TODO' left in text
             """
         And the exit status should be 0
+
+    Scenario: Lint a zig file
+        When I lint "test.zig"
+        Then the output should contain exactly:
+            """
+            test.zig:7:9:vale.Annotations:'XXX' left in text
+            test.zig:10:9:vale.Annotations:'TODO' left in text
+            """
