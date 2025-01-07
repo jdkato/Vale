@@ -3,4 +3,4 @@ select:
     query: info.description
 
   - name: Servers
-    query: "servers.all().description"
+    query: servers.all().description
