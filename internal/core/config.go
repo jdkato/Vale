@@ -208,7 +208,7 @@ type Config struct {
 	RootINI           string                     // the path to the project's .vale.ini file
 	Paths             []string                   // A list of paths to search for styles
 	ConfigFiles       []string                   // A list of configuration files to load
-	Blueprints        map[string]string          // A map of blueprint -> path
+	Blueprints        map[string]*Blueprint      // A map of blueprint -> path
 
 	AcceptedTokens []string `json:"-"` // Project-specific vocabulary (okay)
 	RejectedTokens []string `json:"-"` // Project-specific vocabulary (avoid)
@@ -244,7 +244,7 @@ func NewConfig(flags *CLIFlags) (*Config, error) {
 	cfg.TokenIgnores = make(map[string][]string)
 	cfg.CommentDelimiters = make(map[string][2]string)
 	cfg.FormatToLang = make(map[string]string)
-	cfg.Blueprints = make(map[string]string)
+	cfg.Blueprints = make(map[string]*Blueprint)
 	cfg.Paths = []string{}
 	cfg.ConfigFiles = []string{}
 
