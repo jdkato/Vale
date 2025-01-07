@@ -88,12 +88,11 @@ func (n *Info) doNLP(blk *Block, seg segmenter) ([]Block, error) {
 
 	ctx := blk.Context
 	idx := blk.Line
-	ext := n.Scope
 
 	if n.Splitting {
 		for _, p := range strings.SplitAfter(blk.Text, "\n\n") {
 			blks = append(
-				blks, NewLinedBlock(ctx, p, "paragraph"+ext, idx, nil))
+				blks, NewLinedBlock(ctx, p, "paragraph."+blk.Scope, idx, nil))
 		}
 	}
 
@@ -102,13 +101,13 @@ func (n *Info) doNLP(blk *Block, seg segmenter) ([]Block, error) {
 			s = strings.TrimSpace(s)
 			if s != "" {
 				blks = append(
-					blks, NewLinedBlock(ctx, s, "sentence"+ext, idx, nil))
+					blks, NewLinedBlock(ctx, s, "sentence."+blk.Scope, idx, nil))
 			}
 		}
 	}
 
 	blks = append(
-		blks, NewLinedBlock(ctx, blk.Text, "text"+ext, idx, nil))
+		blks, NewLinedBlock(ctx, blk.Text, blk.Scope, idx, nil))
 
 	return blks, nil
 }

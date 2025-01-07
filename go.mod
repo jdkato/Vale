@@ -20,15 +20,17 @@ require (
 	github.com/niklasfasching/go-org v1.6.6
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/otiai10/copy v1.7.0
+	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/pterm/pterm v0.12.76
 	github.com/remeh/sizedwaitgroup v1.0.0
 	github.com/smacker/go-tree-sitter v0.0.0-20240514083259-c5d1f3f5f99e
 	github.com/spf13/pflag v1.0.5
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
+	github.com/tomwright/dasel/v2 v2.8.1
 	github.com/yuin/goldmark v1.5.6
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
-	golang.org/x/net v0.23.0
-	golang.org/x/sys v0.18.0
+	golang.org/x/net v0.25.0
+	golang.org/x/sys v0.20.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -64,9 +66,9 @@ require (
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/crypto v0.21.0 // indirect
-	golang.org/x/term v0.18.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/crypto v0.23.0 // indirect
+	golang.org/x/term v0.20.0 // indirect
+	golang.org/x/text v0.15.0 // indirect
 	gopkg.in/neurosnap/sentences.v1 v1.0.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

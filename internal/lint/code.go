@@ -8,9 +8,26 @@ import (
 	"strings"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/glob"
 	"github.com/errata-ai/vale/v3/internal/lint/code"
 	"github.com/errata-ai/vale/v3/internal/nlp"
 )
+
+func updateQueries(f *core.File, blueprints map[string]*core.Blueprint) ([]string, error) {
+	for syntax, blueprint := range blueprints {
+		sec, err := glob.Compile(syntax)
+		if err != nil {
+			return nil, err
+		} else if sec.Match(f.Path) {
+			found := []string{}
+			for _, query := range blueprint.Steps {
+				found = append(found, query.Operation)
+			}
+			return found, nil
+		}
+	}
+	return []string{}, nil
+}
 
 func (l *Linter) lintCode(f *core.File) error {
 	lang, err := code.GetLanguageFromExt(f.RealExt)
@@ -19,6 +36,13 @@ func (l *Linter) lintCode(f *core.File) error {
 		return l.lintCodeOld(f)
 	}
 	ignored := l.Manager.Config.IgnoredScopes
+
+	found, err := updateQueries(f, l.Manager.Config.Blueprints)
+	if err != nil {
+		return err
+	} else if len(found) > 0 {
+		lang.Queries = found
+	}
 
 	comments, err := code.GetComments([]byte(f.Content), lang)
 	if err != nil {

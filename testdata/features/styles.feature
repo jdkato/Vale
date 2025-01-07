@@ -60,7 +60,9 @@ Feature: Styles
             test.rst:3:1:demo.SentenceLength:Sentences should be less than 25 words
             test.rst:5:28:demo.Ending-Preposition:Don't end a sentence with 'by.'
             test.rst:9:1:demo.ParagraphLength:Paragraphs should be less than 150 words
+            test.rst:13:62:demo.Spelling:Inconsistent spelling of 'centre'
             test.rst:20:25:demo.Spelling:Inconsistent spelling of 'center'
+            test.rst:24:10:demo.Spelling:Inconsistent spelling of 'color'
             test.rst:24:32:demo.Spelling:Inconsistent spelling of 'colour'
             test.rst:32:1:Limit.Rule:Don't use 'hey'.
             """

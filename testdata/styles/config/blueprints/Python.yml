@@ -1,0 +1,3 @@
+engine: tree-sitter
+steps:
+  - operation: (comment)+ @comment
