@@ -1,6 +1,6 @@
-parser: dasel
-queries:
+engine: dasel
+steps:
   - scope: title
-    expression: info.title
-  - expression: info.description
-  - expression: servers.all().description
+    operation: info.title
+  - operation: info.description
+  - operation: servers.all().description
