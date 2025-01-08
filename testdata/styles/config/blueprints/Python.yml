@@ -1,0 +1,3 @@
+parser: tree-sitter
+queries:
+  - expression: (comment)+ @comment

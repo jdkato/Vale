@@ -38,6 +38,7 @@ func (l *Linter) lintScopedValues(f *core.File, values []core.ScopedValues) erro
 
 	last := 0
 	for _, matches := range values {
+		l.SetMetaScope(matches.Scope)
 		for _, v := range matches.Values {
 			i, line := findLineBySubstring(wholeFile, v)
 			if i == 0 {

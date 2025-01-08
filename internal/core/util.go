@@ -349,3 +349,18 @@ func FindProcess(pid int) *os.Process {
 
 	return p
 }
+
+// UniqueStrings returns a new slice with all duplicate strings removed.
+func UniqueStrings(slice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+
+	for _, entry := range slice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+
+	return list
+}

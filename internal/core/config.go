@@ -208,14 +208,14 @@ type Config struct {
 	RootINI           string                     // the path to the project's .vale.ini file
 	Paths             []string                   // A list of paths to search for styles
 	ConfigFiles       []string                   // A list of configuration files to load
-	Blueprints        map[string]*Blueprint      // A map of blueprint -> path
 
 	AcceptedTokens []string `json:"-"` // Project-specific vocabulary (okay)
 	RejectedTokens []string `json:"-"` // Project-specific vocabulary (avoid)
 
-	FallbackPath string               `json:"-"`
-	SecToPat     map[string]glob.Glob `json:"-"`
-	Styles       []string             `json:"-"`
+	FallbackPath string                `json:"-"`
+	SecToPat     map[string]glob.Glob  `json:"-"`
+	Styles       []string              `json:"-"`
+	Blueprints   map[string]*Blueprint `json:"-"`
 
 	NLPEndpoint string // An external API to call for NLP-related work.
 

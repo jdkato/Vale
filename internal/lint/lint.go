@@ -25,6 +25,7 @@ type Linter struct {
 	client    *http.Client
 	HasDir    bool
 	nonGlobal bool
+	metaScope string
 }
 
 type lintResult struct {
@@ -67,6 +68,18 @@ func (l *Linter) Transform(f *core.File) (string, error) {
 func (l *Linter) LintString(src string) ([]*core.File, error) {
 	linted := l.lintFile(src)
 	return []*core.File{linted.file}, linted.err
+}
+
+// SetMetaScope sets an optional meta scope.
+//
+// A meta scope is a string that is appended to the end of each check's scope
+// providing extra context for the check.
+func (l *Linter) SetMetaScope(scope string) {
+	if scope != "" {
+		l.metaScope = "." + scope
+	} else {
+		l.metaScope = ""
+	}
 }
 
 // Lint src according to its format.

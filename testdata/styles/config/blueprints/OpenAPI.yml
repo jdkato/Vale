@@ -1,4 +1,6 @@
 parser: dasel
 queries:
+  - scope: title
+    expression: info.title
   - expression: info.description
   - expression: servers.all().description

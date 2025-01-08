@@ -150,14 +150,14 @@ func (l *Linter) lintScope(f *core.File, state *walker, txt string) error {
 			f.Metrics[strings.TrimPrefix(scope, "text.")]++
 
 			txt = strings.TrimLeft(txt, " ")
-			b := state.block(txt, scope+f.RealExt)
+			b := state.block(txt, scope+l.metaScope+f.RealExt)
 			return l.lintBlock(f, b, state.lines, 0, false)
 		}
 	}
 
 	f.Summary.WriteString(txt + "\n\n")
 
-	b := state.block(txt, "txt")
+	b := state.block(txt, "text"+l.metaScope+f.RealExt)
 	return l.lintProse(f, b, state.lines)
 }
 

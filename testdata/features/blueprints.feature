@@ -3,7 +3,12 @@ Feature: Blueprints
         When I test "blueprints"
         Then the output should contain exactly:
             """
+            API.yml:3:10:OpenAPI.Titles:'sample API' should be capitalized
             API.yml:4:25:Vale.Spelling:Did you really mean 'multiline'?
             API.yml:9:70:Vale.Spelling:Did you really mean 'serrver'?
             Rule.yml:3:39:Vale.Repetition:'can' is repeated!
+            test.py:1:3:vale.Annotations:'FIXME' left in text
+            test.py:11:3:vale.Annotations:'XXX' left in text
+            test.py:13:16:vale.Annotations:'XXX' left in text
+            test.py:14:14:vale.Annotations:'NOTE' left in text
             """
