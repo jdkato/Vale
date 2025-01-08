@@ -35,15 +35,18 @@ func (l *Linter) lintScopedValues(f *core.File, values []core.ScopedValues) erro
 	l.HasDir = true
 
 	wholeFile := f.Content
-
 	last := 0
+	index := 0
+
 	for _, matches := range values {
 		l.SetMetaScope(matches.Scope)
 		for _, v := range matches.Values {
-			i, line := findLineBySubstring(wholeFile, v)
+			i, line := findLineBySubstring(wholeFile, v, index)
 			if i == 0 {
 				return core.NewE100(f.Path, fmt.Errorf("'%s' not found", v))
 			}
+
+			index = i
 			f.SetText(v)
 
 			switch f.NormedExt {
@@ -73,12 +76,17 @@ func (l *Linter) lintScopedValues(f *core.File, values []core.ScopedValues) erro
 	return err
 }
 
-func findLineBySubstring(s, sub string) (int, string) {
+func findLineBySubstring(s, sub string, last int) (int, string) {
+	if strings.Count(sub, "\n") > 0 {
+		sub = strings.Split(sub, "\n")[0]
+	}
+
 	for i, line := range strings.Split(s, "\n") {
-		if strings.Contains(line, sub) {
+		if i >= last && strings.Contains(line, sub) {
 			return i + 1, line
 		}
 	}
+
 	return 0, ""
 }
 
