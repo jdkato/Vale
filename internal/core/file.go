@@ -271,6 +271,11 @@ func (f *File) SetText(s string) {
 	f.history = map[string]int{}
 }
 
+// SetNormedExt sets the normalized extension of a File.
+func (f *File) SetNormedExt(ext string) {
+	f.NormedExt = "." + ext
+}
+
 // AddAlert calculates the in-text location of an Alert and adds it to a File.
 func (f *File) AddAlert(a Alert, blk nlp.Block, lines, pad int, lookup bool) {
 	ctx := blk.Context

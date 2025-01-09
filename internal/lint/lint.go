@@ -274,12 +274,12 @@ func (l *Linter) lintProse(f *core.File, blk nlp.Block, lines int) error {
 }
 
 func (l *Linter) lintTxt(f *core.File) error {
-	block := nlp.NewBlock("", f.Content, "text"+f.RealExt)
+	block := nlp.NewBlock("", f.Content, "text"+l.metaScope+f.RealExt)
 	return l.lintProse(f, block, len(f.Lines))
 }
 
 func (l *Linter) lintLines(f *core.File) error {
-	block := nlp.NewBlock("", f.Content, "text"+f.RealExt)
+	block := nlp.NewBlock("", f.Content, "text"+l.metaScope+f.RealExt)
 	return l.lintBlock(f, block, len(f.Lines), 0, true)
 }
 

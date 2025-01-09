@@ -38,28 +38,29 @@ func (l *Linter) lintScopedValues(f *core.File, values []core.ScopedValues) erro
 	last := 0
 	index := 0
 
-	for _, matches := range values {
-		l.SetMetaScope(matches.Scope)
-		for _, v := range matches.Values {
+	for _, match := range values {
+		l.SetMetaScope(match.Scope)
+		for _, v := range match.Values {
 			i, line := findLineBySubstring(wholeFile, v, index)
 			if i == 0 {
 				return core.NewE100(f.Path, fmt.Errorf("'%s' not found", v))
 			}
-
 			index = i
-			f.SetText(v)
 
-			switch f.NormedExt {
-			case ".md":
+			f.SetText(v)
+			f.SetNormedExt(match.Format)
+
+			switch match.Format {
+			case "md":
 				err = l.lintMarkdown(f)
-			case ".rst":
+			case "rst":
 				err = l.lintRST(f)
-			case ".xml":
-				err = l.lintADoc(f)
-			case ".html":
+			case "html":
 				err = l.lintHTML(f)
-			case ".org":
+			case "org":
 				err = l.lintOrg(f)
+			case "adoc":
+				err = l.lintADoc(f)
 			default:
 				err = l.lintLines(f)
 			}

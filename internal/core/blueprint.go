@@ -37,6 +37,7 @@ type Blueprint struct {
 // A ScopedValues is a value that has been assigned a scope.
 type ScopedValues struct {
 	Scope  string
+	Format string
 	Values []string
 }
 
@@ -89,6 +90,7 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 		found = append(found, ScopedValues{
 			Scope:  s.Name,
 			Values: values,
+			Format: s.Type,
 		})
 	}
 
