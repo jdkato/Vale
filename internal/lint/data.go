@@ -14,10 +14,10 @@ func (l *Linter) lintData(f *core.File) error {
 		if err != nil {
 			return err
 		} else if sec.Match(f.Path) {
-			found, err := blueprint.Apply(f)
-			if err != nil {
+			found, berr := blueprint.Apply(f)
+			if berr != nil {
 				return core.NewE201FromTarget(
-					err.Error(),
+					berr.Error(),
 					fmt.Sprintf("Blueprint = %s", blueprint),
 					l.Manager.Config.RootINI,
 				)

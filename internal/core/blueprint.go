@@ -77,9 +77,9 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 	}
 
 	for _, s := range b.Steps {
-		selected, err := dasel.Select(value, s.Operation)
-		if err != nil {
-			return found, err
+		selected, verr := dasel.Select(value, s.Operation)
+		if verr != nil {
+			return found, verr
 		}
 
 		values := []string{}
