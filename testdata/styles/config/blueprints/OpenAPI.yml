@@ -1,6 +1,6 @@
 engine: dasel
 steps:
   - scope: title
-    operation: info.title
-  - operation: info.description
-  - operation: servers.all().description
+    query: info.title
+  - query: info.description
+  - query: servers.all().description

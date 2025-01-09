@@ -21,7 +21,7 @@ func updateQueries(f *core.File, blueprints map[string]*core.Blueprint) ([]strin
 		} else if sec.Match(f.Path) {
 			found := []string{}
 			for _, query := range blueprint.Steps {
-				found = append(found, query.Operation)
+				found = append(found, query.Query)
 			}
 			return found, nil
 		}

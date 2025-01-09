@@ -15,12 +15,12 @@ type DaselValue = map[string]any
 
 var blueprintEngines = []string{"tree-sitter", "dasel", "command"}
 
-// A Query is a single query that we want to run against a document.
+// A Step is a single query that we want to run against a document.
 //
 // The result of the query is optionally assigned the given scope.
-type Query struct {
-	Scope     string `yaml:"scope"`
-	Operation string `yaml:"operation"`
+type Step struct {
+	Scope string `yaml:"scope"`
+	Query string `yaml:"query"`
 }
 
 // A Blueprint is a set of queries that we want to run against a document.
@@ -31,8 +31,8 @@ type Query struct {
 // - `dasel`
 // - `command`
 type Blueprint struct {
-	Engine string  `yaml:"engine"`
-	Steps  []Query `yaml:"steps"`
+	Engine string `yaml:"engine"`
+	Steps  []Step `yaml:"steps"`
 }
 
 // A ScopedValues is a value that has been assigned a scope.
@@ -77,7 +77,7 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 	}
 
 	for _, s := range b.Steps {
-		selected, verr := dasel.Select(value, s.Operation)
+		selected, verr := dasel.Select(value, s.Query)
 		if verr != nil {
 			return found, verr
 		}
