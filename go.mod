@@ -29,8 +29,8 @@ require (
 	github.com/tomwright/dasel/v2 v2.8.1
 	github.com/yuin/goldmark v1.5.6
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
-	golang.org/x/net v0.25.0
-	golang.org/x/sys v0.20.0
+	golang.org/x/net v0.34.0
+	golang.org/x/sys v0.29.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -66,9 +66,9 @@ require (
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/crypto v0.23.0 // indirect
-	golang.org/x/term v0.20.0 // indirect
-	golang.org/x/text v0.15.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/term v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/neurosnap/sentences.v1 v1.0.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
