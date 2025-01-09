@@ -16,6 +16,7 @@ endtab
 endtabs
 flesch
 gunning fog
+Gurubase
 haskell
 Homebrew
 ignorecase
