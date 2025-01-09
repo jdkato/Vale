@@ -1,6 +1,6 @@
 engine: dasel
-steps:
-  - scope: title
-    query: info.title
-  - query: info.description
-  - query: servers.all().description
+scopes:
+  - name: title
+    expr: info.title
+  - expr: info.description
+  - expr: servers.all().description

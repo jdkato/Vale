@@ -13,14 +13,13 @@ import (
 
 type DaselValue = map[string]any
 
-var blueprintEngines = []string{"tree-sitter", "dasel", "command"}
+var blueprintEngines = []string{"tree-sitter", "dasel"}
 
-// A Step is a single query that we want to run against a document.
-//
-// The result of the query is optionally assigned the given scope.
-type Step struct {
-	Scope string `yaml:"scope"`
-	Query string `yaml:"query"`
+// A Scope is a single query that we want to run against a document.
+type Scope struct {
+	Name string `yaml:"name"`
+	Expr string `yaml:"expr"`
+	Type string `yaml:"type"`
 }
 
 // A Blueprint is a set of queries that we want to run against a document.
@@ -31,8 +30,8 @@ type Step struct {
 // - `dasel`
 // - `command`
 type Blueprint struct {
-	Engine string `yaml:"engine"`
-	Steps  []Step `yaml:"steps"`
+	Engine string  `yaml:"engine"`
+	Scopes []Scope `yaml:"scopes"`
 }
 
 // A ScopedValues is a value that has been assigned a scope.
@@ -61,7 +60,7 @@ func NewBlueprint(path string) (*Blueprint, error) {
 		return nil, fmt.Errorf("unsupported parser: %s", blueprint.Engine)
 	}
 
-	if len(blueprint.Steps) == 0 {
+	if len(blueprint.Scopes) == 0 {
 		return nil, fmt.Errorf("missing queries")
 	}
 
@@ -76,8 +75,8 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 		return nil, NewE100(f.Path, err)
 	}
 
-	for _, s := range b.Steps {
-		selected, verr := dasel.Select(value, s.Query)
+	for _, s := range b.Scopes {
+		selected, verr := dasel.Select(value, s.Expr)
 		if verr != nil {
 			return found, verr
 		}
@@ -88,7 +87,7 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 		}
 
 		found = append(found, ScopedValues{
-			Scope:  s.Scope,
+			Scope:  s.Name,
 			Values: values,
 		})
 	}
