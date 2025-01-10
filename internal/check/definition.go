@@ -408,9 +408,12 @@ func checkScopes(scopes []string, path string) error {
 				fmt.Sprintf("scope '%v' is no longer supported; use 'raw' instead.", scope),
 				"scope",
 				path)
-		} else if !core.StringInSlice(scope, allowedScopes) {
+		}
+
+		// No spaces
+		if strings.Contains(scope, " ") {
 			return core.NewE201FromTarget(
-				fmt.Sprintf("'%v' is not a valid scope; must be one of %v", scope, allowedScopes),
+				fmt.Sprintf("scope '%v' contains spaces.", scope),
 				"scope",
 				path)
 		}

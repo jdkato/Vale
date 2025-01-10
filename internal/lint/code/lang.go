@@ -16,7 +16,7 @@ type padding func(string) int
 type Language struct {
 	Delims  *regexp.Regexp
 	Parser  *sitter.Language
-	Queries []string
+	Queries []core.Scope
 	Cutset  string
 	Padding padding
 }

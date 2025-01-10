@@ -13,20 +13,19 @@ import (
 	"github.com/errata-ai/vale/v3/internal/nlp"
 )
 
-func updateQueries(f *core.File, blueprints map[string]*core.Blueprint) ([]string, error) {
+func updateQueries(f *core.File, blueprints map[string]*core.Blueprint) ([]core.Scope, error) {
+	var found []core.Scope
+
 	for syntax, blueprint := range blueprints {
 		sec, err := glob.Compile(syntax)
 		if err != nil {
 			return nil, err
 		} else if sec.Match(f.Path) {
-			found := []string{}
-			for _, query := range blueprint.Scopes {
-				found = append(found, query.Expr)
-			}
-			return found, nil
+			found = blueprint.Scopes
 		}
 	}
-	return []string{}, nil
+
+	return found, nil
 }
 
 func (l *Linter) lintCode(f *core.File) error {
@@ -52,6 +51,7 @@ func (l *Linter) lintCode(f *core.File) error {
 
 	last := 0
 	for _, comment := range comments {
+		l.SetMetaScope(comment.Scope)
 		if core.StringInSlice("comment", ignored) {
 			continue
 		} else if core.StringInSlice(comment.Scope, ignored) {

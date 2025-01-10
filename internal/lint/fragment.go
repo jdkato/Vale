@@ -72,6 +72,7 @@ func (l *Linter) lintFragments(f *core.File) error {
 
 	last := 0
 	for _, comment := range comments {
+		l.SetMetaScope(comment.Scope)
 		f.SetText(comment.Text)
 
 		switch f.NormedExt {
