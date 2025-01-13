@@ -1,0 +1,10 @@
+engine: dasel
+scopes:
+  - name: title
+    expr: info.title
+
+  - expr: info.description
+    type: md
+
+  - expr: servers.all().description
+    type: md

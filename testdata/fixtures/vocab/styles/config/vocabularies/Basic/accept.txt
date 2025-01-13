@@ -1,9 +1,10 @@
+(?i)GitHub
+[Oo]bservability
 [pP]y.*\b
-definately
 # This is a comment
+ABC-DEF
+ABCDEF
+definately
 Documentarians
 Log4j
-ABCDEF
-ABC-DEF
 PLuG
-(?i)GitHub

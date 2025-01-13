@@ -110,11 +110,11 @@ func GetComments(source []byte, lang *Language) ([]Comment, error) {
 	engine := NewQueryEngine(tree, lang)
 
 	for _, query := range lang.Queries {
-		q, qErr := sitter.NewQuery([]byte(query), lang.Parser)
+		q, qErr := sitter.NewQuery([]byte(query.Expr), lang.Parser)
 		if qErr != nil {
 			return comments, qErr
 		}
-		comments = append(comments, engine.run(q, source)...)
+		comments = append(comments, engine.run(query.Name, q, source)...)
 	}
 
 	if len(lang.Queries) > 1 {

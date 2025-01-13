@@ -38,8 +38,12 @@ func TestPrepText(t *testing.T) {
 
 func TestPhrase(t *testing.T) {
 	rawToPrepped := map[string]bool{
-		"test suite":    true,
-		"test[ ]?suite": false,
+		"test suite":               true,
+		"test[ ]?suite":            false,
+		"Google":                   true,
+		"write-good":               true,
+		"https://vale.sh/explorer": false,
+		"Google.zip":               false,
 	}
 	for input, output := range rawToPrepped {
 		result := IsPhrase(input)

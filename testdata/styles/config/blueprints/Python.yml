@@ -1,0 +1,5 @@
+engine: tree-sitter
+scopes:
+  - expr: (comment)+ @comment
+    name: python
+    type: md

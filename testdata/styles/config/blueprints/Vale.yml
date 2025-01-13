@@ -1,0 +1,3 @@
+engine: dasel
+scopes:
+  - expr: description

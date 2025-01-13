@@ -58,6 +58,13 @@ func (l *Linter) lintFragments(f *core.File) error {
 		return err
 	}
 
+	found, err := updateQueries(f, l.Manager.Config.Blueprints)
+	if err != nil {
+		return err
+	} else if len(found) > 0 {
+		lang.Queries = found
+	}
+
 	comments, err := code.GetComments([]byte(f.Content), lang)
 	if err != nil {
 		return err
@@ -65,6 +72,7 @@ func (l *Linter) lintFragments(f *core.File) error {
 
 	last := 0
 	for _, comment := range comments {
+		l.SetMetaScope(comment.Scope)
 		f.SetText(comment.Text)
 
 		switch f.NormedExt {

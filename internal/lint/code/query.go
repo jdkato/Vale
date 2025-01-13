@@ -26,8 +26,12 @@ func NewQueryEngine(tree *sitter.Tree, lang *Language) *QueryEngine {
 	}
 }
 
-func (qe *QueryEngine) run(q *sitter.Query, source []byte) []Comment {
+func (qe *QueryEngine) run(meta string, q *sitter.Query, source []byte) []Comment {
 	var comments []Comment
+
+	if meta != "" {
+		meta = "." + meta
+	}
 
 	qc := sitter.NewQueryCursor()
 	qc.Exec(q, qe.tree.RootNode())
@@ -43,9 +47,9 @@ func (qe *QueryEngine) run(q *sitter.Query, source []byte) []Comment {
 			rText := c.Node.Content(source)
 			cText := qe.lang.Delims.ReplaceAllString(rText, "")
 
-			scope := "text.comment.line"
+			scope := "text.comment" + meta + ".line"
 			if strings.Count(cText, "\n") > 1 {
-				scope = "text.comment.block"
+				scope = "text.comment" + meta + ".block"
 
 				buf := bytes.Buffer{}
 				for _, line := range strings.Split(cText, "\n") {

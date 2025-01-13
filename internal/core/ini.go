@@ -137,6 +137,22 @@ var syntaxOpts = map[string]func(string, *ini.Section, *Config) error{
 		cfg.FormatToLang[label] = sec.Key("Lang").String()
 		return nil
 	},
+	"Blueprint": func(label string, sec *ini.Section, cfg *Config) error {
+		name := sec.Key("Blueprint").String()
+
+		path := FindConfigAsset(cfg, name+".yml", BlueprintsDir)
+		if path == "" {
+			return fmt.Errorf("blueprint '%s' not found", name)
+		}
+
+		blueprint, err := NewBlueprint(path)
+		if err != nil {
+			return err
+		}
+
+		cfg.Blueprints[label] = blueprint
+		return nil
+	},
 }
 
 var globalOpts = map[string]func(*ini.Section, *Config){

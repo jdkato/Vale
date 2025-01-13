@@ -5,9 +5,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/errata-ai/regexp2"
 	"golang.org/x/exp/maps"
 
+	"github.com/errata-ai/regexp2"
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/nlp"
 )
@@ -123,8 +123,7 @@ func (s Substitution) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core
 				if !same && !isMatch(s.exceptRe, observed) {
 					action := s.Fields().Action
 					if action.Name == "replace" && len(action.Params) == 0 {
-						action.Params = strings.Split(expected, "|")
-
+						action.Params = getOptions(expected)
 						if s.Capitalize && observed == core.CapFirst(observed) {
 							cased := []string{}
 							for _, param := range action.Params {
@@ -204,4 +203,29 @@ func subMsg(s Substitution, index int, observed string) (string, error) {
 
 	msgRe := regexp2.MustCompileStd(msg)
 	return msgRe.Replace(observed, expected, -1, -1)
+}
+
+// getOptions returns a slice of options from a match.
+//
+// For example, given the match "a|b|c", this function will return
+// []string{"a", "b", "c"}.
+//
+// This allows the user to specify multiple options for a single match.
+//
+// https://vale.sh/docs/checks/substitution#multiple-suggestions
+func getOptions(match string) []string {
+	options := []string{}
+
+	// We want to ignore any escaped pipes, so make a temporary substitution:
+	//
+	// TODO: Add support for `.Split` in `regexp2`.
+	temp := strings.ReplaceAll(match, `\|`, "PIPE")
+
+	for _, option := range strings.Split(temp, "|") {
+		if option != "" {
+			options = append(options, strings.ReplaceAll(option, "PIPE", `|`))
+		}
+	}
+
+	return options
 }

@@ -18,15 +18,17 @@ require (
 	github.com/niklasfasching/go-org v1.7.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/otiai10/copy v1.14.0
+  github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/pterm/pterm v0.12.40
 	github.com/remeh/sizedwaitgroup v1.0.0
 	github.com/smacker/go-tree-sitter v0.0.0-20240827094217-dd81d9e9be82
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.10.0
+  github.com/tomwright/dasel/v2 v2.8.1
 	github.com/yuin/goldmark v1.7.8
-	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67
-	golang.org/x/net v0.33.0
-	golang.org/x/sys v0.28.0
+	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
+	golang.org/x/net v0.34.0
+	golang.org/x/sys v0.29.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 

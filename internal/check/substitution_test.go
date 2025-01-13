@@ -126,3 +126,30 @@ func TestRegexEscapedParens(t *testing.T) {
 		t.Fatalf("Expected message `%s`, got `%s`", expected, message)
 	}
 }
+
+func TestOptions(t *testing.T) {
+	cases := map[string][]string{
+		"foo|bar":     {"foo", "bar"},
+		"foo|bar|baz": {"foo", "bar", "baz"},
+		"|foo|":       {"foo"},
+		`\|foo\|`:     {"|foo|"},
+		`\|foo\||bar`: {"|foo|", "bar"},
+		"foo|bar|":    {"foo", "bar"},
+		"foo|":        {"foo"},
+		"|":           {},
+		`\|`:          {"|"},
+	}
+
+	for pattern, expected := range cases {
+		actual := getOptions(pattern)
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected %d options, got %v", len(expected), actual)
+		}
+
+		for i, opt := range expected {
+			if actual[i] != opt {
+				t.Fatalf("Expected '%s', got '%s'", opt, actual[i])
+			}
+		}
+	}
+}

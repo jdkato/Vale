@@ -88,7 +88,9 @@ var FormatByExtension = map[string][]string{
 	`\.(?:ts|tsx)$`:    {".ts", "code"},
 	`\.(?:txt)$`:       {".txt", "text"},
 	`\.(?:xml)$`:       {".xml", "markup"},
-	`\.(?:yaml|yml)$`:  {".yml", "code"},
+	`\.(?:yaml|yml)$`:  {".yml", "data"},
+	`\.(?:json)$`:      {".json", "data"},
+	`\.(?:toml)$`:      {".toml", "data"},
 }
 
 // FormatFromExt takes a file extension and returns its [normExt, format]
@@ -101,6 +103,12 @@ func FormatFromExt(path string, mapping map[string]string) (string, string) {
 		if kind == "code" && getFormat("."+format) == "markup" {
 			// NOTE: This is a special case of embedded markup within code.
 			return "." + format, "fragment"
+		} else if kind == "data" && getFormat("."+format) == "markup" {
+			// NOTE: This is a special case of embedded markup within data.
+			//
+			// Unlike code, data formats are *always* linted as a fragment with
+			// the default format as plain text.
+			return "." + format, "data"
 		}
 		base = format
 	}

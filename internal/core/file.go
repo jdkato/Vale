@@ -92,10 +92,11 @@ func NewFile(src string, config *Config) (*File, error) {
 	baseStyles := config.GBaseStyles
 	checks := make(map[string]bool)
 
+	names := []string{}
 	for _, fp := range filepaths {
 		for _, sec := range config.StyleKeys {
 			if pat, found := config.SecToPat[sec]; found && pat.Match(fp) {
-				baseStyles = config.SBaseStyles[sec]
+				names = append(names, config.SBaseStyles[sec]...)
 			}
 		}
 
@@ -106,6 +107,10 @@ func NewFile(src string, config *Config) (*File, error) {
 				}
 			}
 		}
+	}
+
+	if len(names) > 0 {
+		baseStyles = UniqueStrings(names)
 	}
 
 	lang := "en"
@@ -264,6 +269,11 @@ func (f *File) SetText(s string) {
 	f.Content = s
 	f.Lines = strings.SplitAfter(s, "\n")
 	f.history = map[string]int{}
+}
+
+// SetNormedExt sets the normalized extension of a File.
+func (f *File) SetNormedExt(ext string) {
+	f.NormedExt = "." + ext
 }
 
 // AddAlert calculates the in-text location of an Alert and adds it to a File.
