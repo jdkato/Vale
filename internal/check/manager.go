@@ -3,11 +3,11 @@ package check
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/karrick/godirwalk"
 	"golang.org/x/exp/maps"
 
 	"github.com/errata-ai/vale/v3/internal/core"
@@ -122,16 +122,14 @@ func (mgr *Manager) AssignNLP(f *core.File) nlp.Info {
 }
 
 func (mgr *Manager) addStyle(path string) error {
-	return godirwalk.Walk(path, &godirwalk.Options{
-		Callback: func(fp string, de *godirwalk.Dirent) error {
-			if de.IsDir() {
-				return nil
-			}
-			return mgr.addRuleFromSource(de.Name(), fp)
-		},
-		Unsorted:            true,
-		AllowNonDirectory:   true,
-		FollowSymbolicLinks: true,
+	return filepath.WalkDir(path, func(fp string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		return mgr.addRuleFromSource(d.Name(), fp)
 	})
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -92,4 +93,50 @@ func mkdir(dir string) error {
 
 func toCodeStyle(s string) string {
 	return pterm.Fuzzy.Sprint(s)
+}
+
+func unarchive(src, dest string) error {
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	if err = mkdir(dest); err != nil {
+		return err
+	}
+
+	for _, file := range r.File {
+		destPath := filepath.Join(dest, filepath.Clean(file.Name))
+		if !strings.HasPrefix(destPath, filepath.Clean(dest)+string(os.PathSeparator)) {
+			return fmt.Errorf("invalid file path: %s", file.Name)
+		}
+
+		if file.FileInfo().IsDir() {
+			if err = mkdir(destPath); err != nil {
+				return err
+			}
+			continue
+		}
+		if err = mkdir(filepath.Dir(destPath)); err != nil {
+			return err
+		}
+
+		dstFile, dstErr := os.OpenFile(destPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		if dstErr != nil {
+			return dstErr
+		}
+		defer dstFile.Close()
+
+		srcFile, srcErr := file.Open()
+		if srcErr != nil {
+			return srcErr
+		}
+		defer srcFile.Close()
+
+		if _, err = io.Copy(dstFile, io.LimitReader(srcFile, 1024*1024*1024*10)); err != nil {
+			return err
+		}
+	}
+	return nil
 }

@@ -3,11 +3,11 @@ package core
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"path/filepath"
 	"strings"
 
 	"github.com/errata-ai/ini"
-	"github.com/karrick/godirwalk"
 
 	"github.com/errata-ai/vale/v3/internal/glob"
 )
@@ -56,19 +56,18 @@ func loadVocab(root string, cfg *Config) error {
 			"'%s/%s' directory does not exist", VocabDir, root))
 	}
 
-	err := godirwalk.Walk(target, &godirwalk.Options{
-		Callback: func(fp string, de *godirwalk.Dirent) error {
-			name := de.Name()
-			if name == "accept.txt" {
-				return cfg.AddWordListFile(fp, true)
-			} else if name == "reject.txt" {
-				return cfg.AddWordListFile(fp, false)
-			}
-			return nil
-		},
-		Unsorted:            true,
-		AllowNonDirectory:   true,
-		FollowSymbolicLinks: true})
+	err := filepath.Walk(target, func(fp string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		name := info.Name()
+		if name == "accept.txt" {
+			return cfg.AddWordListFile(fp, true)
+		} else if name == "reject.txt" {
+			return cfg.AddWordListFile(fp, false)
+		}
+		return nil
+	})
 
 	return err
 }

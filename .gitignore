@@ -23,6 +23,8 @@ fixtures/formats/Sphinx/_build/
 
 .release-env
 
+.DS_Store
+
 # Files
 *.o
 *.a

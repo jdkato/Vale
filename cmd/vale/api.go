@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mholt/archiver/v3"
 	"github.com/spf13/pflag"
 
 	"github.com/errata-ai/vale/v3/internal/core"
@@ -81,7 +80,7 @@ func fetch(src, dst string) error {
 	}
 
 	resp.Body.Close()
-	return archiver.Unarchive(tmpfile.Name(), dst)
+	return unarchive(tmpfile.Name(), dst)
 }
 
 func install(args []string, flags *core.CLIFlags) error {
