@@ -1,0 +1,8 @@
+extends: substitution
+message: "Use '%s' instead of '%s'."
+ignorecase: false
+level: warning
+action:
+  name: replace
+swap:
+  (?:obvious|obviously|Obviously): ""

@@ -66,7 +66,9 @@ func ShouldIgnoreDirectory(directoryName string) bool {
 func ToSentence(words []string, andOrOr string) string {
 	l := len(words)
 
-	if l == 1 {
+	if l == 0 {
+		return ""
+	} else if l == 1 {
 		return fmt.Sprintf("'%s'", words[0])
 	} else if l == 2 {
 		return fmt.Sprintf("'%s' or '%s'", words[0], words[1])
