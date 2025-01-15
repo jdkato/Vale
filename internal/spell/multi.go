@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 //go:embed data/en_US-web.aff
@@ -204,14 +204,14 @@ func (m *Checker) readAsset(name string) (string, error) {
 		}
 
 		option := filepath.Join(p, name)
-		if core.FileExists(option) {
+		if system.FileExists(option) {
 			return option, nil
 		}
 
 		ln, err := os.Readlink(option)
 		if err != nil {
 			return "", err
-		} else if core.FileExists(ln) {
+		} else if system.FileExists(ln) {
 			return ln, nil
 		}
 	}

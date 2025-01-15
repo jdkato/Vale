@@ -10,6 +10,7 @@ import (
 	"github.com/errata-ai/ini"
 
 	"github.com/errata-ai/vale/v3/internal/glob"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 var coreError = "'%s' is a core option; it should be defined above any syntax-specific options (`[...]`)."
@@ -17,7 +18,7 @@ var coreError = "'%s' is a core option; it should be defined above any syntax-sp
 func determinePath(configPath string, keyPath string) string {
 	// expand tilde at this point as this is where user-provided paths are provided
 	keyPath = normalizePath(keyPath)
-	if !IsDir(configPath) {
+	if !system.IsDir(configPath) {
 		configPath = filepath.Dir(configPath)
 	}
 	sep := string(filepath.Separator)
@@ -45,7 +46,7 @@ func loadVocab(root string, cfg *Config) error {
 	target := ""
 	for _, p := range cfg.SearchPaths() {
 		opt := filepath.Join(p, VocabDir, root)
-		if IsDir(opt) {
+		if system.IsDir(opt) {
 			target = opt
 			break
 		}
@@ -56,7 +57,7 @@ func loadVocab(root string, cfg *Config) error {
 			"'%s/%s' directory does not exist", VocabDir, root))
 	}
 
-	err := filepath.Walk(target, func(fp string, info fs.FileInfo, err error) error {
+	err := system.Walk(target, func(fp string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -204,7 +205,7 @@ var coreOpts = map[string]func(*ini.Section, *Config) error{
 			path := determinePath(cfg.ConfigFile(), candidate)
 
 			cfg.AddStylesPath(path)
-			if !FileExists(path) {
+			if !system.FileExists(path) {
 				return NewE201FromTarget(
 					fmt.Sprintf("The path '%s' does not exist.", path),
 					candidate,

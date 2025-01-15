@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io/fs"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -14,12 +13,11 @@ import (
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/glob"
 	"github.com/errata-ai/vale/v3/internal/nlp"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // A Linter lints a File.
 type Linter struct {
-	pids      []int
-	temps     []*os.File
 	Manager   *check.Manager
 	glob      *glob.Glob
 	client    *http.Client
@@ -94,20 +92,12 @@ func (l *Linter) Lint(input []string, pat string) ([]*core.File, error) {
 		return linted, err
 	}
 
-	if err = l.setup(); err != nil {
-		return linted, err
-	}
-
 	l.glob = &gp
 	for _, src := range input {
 		filesChan, errChan := l.lintFiles(done, src)
 
 		for result := range filesChan {
 			if result.err != nil {
-				err = l.teardown()
-				if err != nil {
-					return linted, err
-				}
 				return linted, result.err
 			} else if l.Manager.Config.Flags.Normalize {
 				result.file.Path = filepath.ToSlash(result.file.Path)
@@ -116,17 +106,8 @@ func (l *Linter) Lint(input []string, pat string) ([]*core.File, error) {
 		}
 
 		if err = <-errChan; err != nil {
-			terr := l.teardown()
-			if terr != nil {
-				return linted, terr
-			}
 			return linted, err
 		}
-	}
-
-	err = l.teardown()
-	if err != nil {
-		return linted, err
 	}
 
 	return linted, nil
@@ -141,7 +122,7 @@ func (l *Linter) lintFiles(done <-chan core.File, root string) (<-chan lintResul
 	go func() {
 		wg := sizedwaitgroup.New(5)
 
-		err := filepath.Walk(root, func(fp string, info fs.FileInfo, err error) error {
+		err := system.Walk(root, func(fp string, info fs.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
@@ -352,29 +333,6 @@ func (l *Linter) shouldRun(name string, f *core.File, chk check.Rule, blk nlp.Bl
 	}
 
 	return true
-}
-
-// setup handles any necessary building, compiling, or pre-processing.
-func (l *Linter) setup() error {
-	return nil
-}
-
-func (l *Linter) teardown() error {
-	for _, pid := range l.pids {
-		if p := core.FindProcess(pid); p != nil {
-			if procErr := p.Kill(); procErr != nil {
-				return procErr
-			}
-		}
-	}
-
-	for _, f := range l.temps {
-		if ferr := os.Remove(f.Name()); ferr != nil {
-			return ferr
-		}
-	}
-
-	return nil
 }
 
 func (l *Linter) match(s string) bool {

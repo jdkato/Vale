@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/errata-ai/ini"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // ConfigSrc is a source of configuration values.
@@ -82,7 +83,7 @@ func FromString(src string, cfg *Config, dry bool) (*ini.File, error) {
 }
 
 func validateFlags(cfg *Config) error {
-	if cfg.Flags.Path != "" && !FileExists(cfg.Flags.Path) {
+	if cfg.Flags.Path != "" && !system.FileExists(cfg.Flags.Path) {
 		return NewE100(
 			"--config",
 			fmt.Errorf("path '%s' does not exist", cfg.Flags.Path))
@@ -167,7 +168,7 @@ func loadINI(cfg *Config, dry bool) (*ini.File, error) {
 	// any other sources to allow for project-agnostic customization.
 	defaultCfg, _ := DefaultConfig()
 
-	if FileExists(defaultCfg) && !cfg.Flags.IgnoreGlobal && !dry {
+	if system.FileExists(defaultCfg) && !cfg.Flags.IgnoreGlobal && !dry {
 		err = uCfg.Append(defaultCfg)
 		if err != nil {
 			return nil, NewE100("default/ini", err)
@@ -199,7 +200,7 @@ func loadConfig(names []string) (string, error) {
 
 		for _, name := range names {
 			loc := path.Join(cwd, name)
-			if FileExists(loc) && !IsDir(loc) {
+			if system.FileExists(loc) && !system.IsDir(loc) {
 				return loc, nil
 			}
 		}
@@ -217,7 +218,7 @@ func loadConfig(names []string) (string, error) {
 
 	for _, name := range names {
 		loc := path.Join(homeDir, name)
-		if FileExists(loc) && !IsDir(loc) {
+		if system.FileExists(loc) && !system.IsDir(loc) {
 			return loc, nil
 		}
 	}

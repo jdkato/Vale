@@ -12,6 +12,7 @@ import (
 
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/nlp"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // Manager controls the loading and validating of the check extension points.
@@ -61,7 +62,7 @@ func NewManager(config *core.Config) (*Manager, error) {
 			fName := parts[1] + ".yml"
 			for _, p := range mgr.Config.SearchPaths() {
 				path = filepath.Join(p, parts[0], fName)
-				if !core.FileExists(path) {
+				if !system.FileExists(path) {
 					continue
 				}
 				if err = mgr.addRuleFromSource(fName, path); err != nil {
@@ -122,14 +123,13 @@ func (mgr *Manager) AssignNLP(f *core.File) nlp.Info {
 }
 
 func (mgr *Manager) addStyle(path string) error {
-	return filepath.WalkDir(path, func(fp string, d fs.DirEntry, err error) error {
+	return system.Walk(path, func(fp string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
-		}
-		if d.IsDir() {
+		} else if info.IsDir() {
 			return nil
 		}
-		return mgr.addRuleFromSource(d.Name(), fp)
+		return mgr.addRuleFromSource(info.Name(), fp)
 	})
 }
 
@@ -243,11 +243,10 @@ func (mgr *Manager) loadStyles(styles []string) error {
 			if mgr.hasStyle(style) {
 				// We've already loaded this style.
 				continue
-			} else if has := core.IsDir(p); !has {
+			} else if has := system.IsDir(p); !has {
 				need = append(need, style)
 				continue
-			}
-			if err := mgr.addStyle(p); err != nil {
+			} else if err := mgr.addStyle(p); err != nil {
 				return err
 			}
 			found = append(found, style)

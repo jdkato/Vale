@@ -7,13 +7,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/adrg/xdg"
 	"github.com/pterm/pterm"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 const nativeHostName = "sh.vale.native"
@@ -60,8 +60,9 @@ func getNativeConfig() (string, error) {
 	if err != nil {
 		return "", err
 	}
+	name := system.Name()
 
-	switch runtime.GOOS {
+	switch name {
 	case "windows":
 		cfg, notFound := xdg.ConfigFile("vale/native/config.json")
 		if notFound != nil {
@@ -70,23 +71,23 @@ func getNativeConfig() (string, error) {
 		return cfg, nil
 	case "linux":
 		path := filepath.Join(home, ".config/vale/native/config.json")
-		if err = mkdir(filepath.Dir(path)); err != nil {
+		if err = system.Mkdir(filepath.Dir(path)); err != nil {
 			return "", err
 		}
 		return path, nil
 	case "darwin":
 		path := filepath.Join(home, "Library/Application Support/vale/native/config.json")
-		if err = mkdir(filepath.Dir(path)); err != nil {
+		if err = system.Mkdir(filepath.Dir(path)); err != nil {
 			return "", err
 		}
 		return path, nil
 	default:
-		return "", fmt.Errorf("unsupported OS: %s", runtime.GOOS)
+		return "", fmt.Errorf("unsupported OS: %s", name)
 	}
 }
 
 func getExecName(name string) string {
-	if runtime.GOOS == "windows" {
+	if system.IsWindows() {
 		return name + ".exe"
 	}
 	return name
@@ -99,7 +100,7 @@ func getManifestDirs() (map[string]string, error) {
 	}
 
 	manifests := map[string]string{}
-	switch runtime.GOOS {
+	switch system.Name() {
 	case "linux":
 		manifests = map[string]string{
 			"chrome":   filepath.Join(home, ".config/google-chrome/NativeMessagingHosts"),
@@ -127,7 +128,7 @@ func getLocation(browser string) (map[string]string, error) {
 	}
 
 	bin := filepath.Dir(cfg)
-	if runtime.GOOS == "windows" {
+	if system.IsWindows() {
 		return map[string]string{
 			"appDir":      bin,
 			"manifestDir": "",
@@ -231,18 +232,20 @@ func hostDownloadURL() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	name := platformAndArch()
+	name := system.PlatformAndArch()
 	return fmt.Sprintf(releaseURL, hostVersion, name, "zip"), nil
 }
 
 func installHost(manifestJSON []byte, manifestFile, browser string) error {
-	switch runtime.GOOS {
+	name := system.Name()
+
+	switch name {
 	case "linux", "darwin":
 		return installNativeHostUnix(manifestJSON, manifestFile)
 	case "windows":
 		return installNativeHostWindows(manifestJSON, manifestFile, browser)
 	default:
-		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
+		return fmt.Errorf("unsupported OS: %s", name)
 	}
 }
 
@@ -281,7 +284,7 @@ func installNativeHost(args []string, _ *core.CLIFlags) error { //nolint:funlen
 	oldInstall := []string{exeName, "LICENSE", "README.md"}
 	for _, file := range oldInstall {
 		fp := filepath.Join(locations["appDir"], file)
-		if core.FileExists(fp) {
+		if system.FileExists(fp) {
 			err = os.Remove(fp)
 			if err != nil {
 				return progressError("host-install", err, p)
@@ -361,7 +364,7 @@ func uninstallNativeHost(args []string, _ *core.CLIFlags) error {
 	exeName := getExecName("vale-native")
 	for _, file := range []string{"config.json", exeName, "LICENSE", "README.md", "host.log"} {
 		fp := filepath.Join(locations["appDir"], file)
-		if core.FileExists(fp) {
+		if system.FileExists(fp) {
 			err = os.Remove(filepath.Join(locations["appDir"], file))
 			if err != nil {
 				return progressError("host-uninstall", err, p)
@@ -374,7 +377,7 @@ func uninstallNativeHost(args []string, _ *core.CLIFlags) error {
 	p.UpdateTitle(steps[1])
 	manifestFile := filepath.Join(locations["manifestDir"], nativeHostName+".json")
 
-	if core.FileExists(manifestFile) {
+	if system.FileExists(manifestFile) {
 		err = os.Remove(manifestFile)
 		if err != nil {
 			return progressError("host-uninstall", err, p)

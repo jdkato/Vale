@@ -13,6 +13,7 @@ import (
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/lint"
 	"github.com/errata-ai/vale/v3/internal/nlp"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // TaggedWord is a word with an NLP context.
@@ -65,7 +66,7 @@ func fix(args []string, flags *core.CLIFlags) error {
 	}
 
 	alert := args[0]
-	if core.FileExists(args[0]) {
+	if system.FileExists(args[0]) {
 		b, err := os.ReadFile(args[0])
 		if err != nil {
 			return err
@@ -112,7 +113,7 @@ func sync(_ []string, flags *core.CLIFlags) error {
 	}
 
 	for idx, pkg := range pkgs {
-		name := fileNameWithoutExt(pkg)
+		name := system.FileNameWithoutExt(pkg)
 
 		p.UpdateTitle("Syncing " + name)
 		p.Increment()
@@ -140,7 +141,7 @@ func printConfig(_ []string, flags *core.CLIFlags) error {
 func printMetrics(args []string, _ *core.CLIFlags) error {
 	if len(args) != 1 {
 		return core.NewE100("ls-metrics", errors.New("one argument expected"))
-	} else if !core.FileExists(args[0]) {
+	} else if !system.FileExists(args[0]) {
 		return errors.New("file not found")
 	}
 
@@ -272,14 +273,14 @@ func printDirs(_ []string, flags *core.CLIFlags) error {
 	styles, _ := core.DefaultStylesPath()
 
 	stylesFound := pterm.FgGreen.Sprint("✓")
-	if !core.IsDir(styles) {
+	if !system.IsDir(styles) {
 		stylesFound = pterm.FgRed.Sprint("✗")
 	}
 
 	cfg, _ := core.DefaultConfig()
 
 	configFound := pterm.FgGreen.Sprint("✓")
-	if !core.FileExists(cfg) {
+	if !system.FileExists(cfg) {
 		configFound = pterm.FgRed.Sprint("✗")
 	}
 
@@ -288,7 +289,7 @@ func printDirs(_ []string, flags *core.CLIFlags) error {
 	nativeExe := filepath.Join(nativeDir, getExecName("vale-native"))
 
 	nativeFound := pterm.FgGreen.Sprint("✓")
-	if !core.FileExists(native) {
+	if !system.FileExists(native) {
 		nativeFound = pterm.FgRed.Sprint("✗")
 	}
 
@@ -313,7 +314,7 @@ func printDirs(_ []string, flags *core.CLIFlags) error {
 func transform(args []string, flags *core.CLIFlags) error {
 	if len(args) != 1 {
 		return core.NewE100("transform", errors.New("one argument expected"))
-	} else if !core.FileExists(args[0]) {
+	} else if !system.FileExists(args[0]) {
 		return fmt.Errorf("file not found: %s", args[0])
 	}
 

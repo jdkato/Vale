@@ -8,6 +8,7 @@ import (
 	"github.com/expr-lang/expr"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 func filter(mgr *Manager) (map[string]Rule, error) {
@@ -15,7 +16,7 @@ func filter(mgr *Manager) (map[string]Rule, error) {
 
 	if stringOrPath == "" {
 		return mgr.rules, nil
-	} else if !core.FileExists(stringOrPath) {
+	} else if !system.FileExists(stringOrPath) {
 		name := stringOrPath
 
 		stringOrPath = core.FindAsset(mgr.Config, name)

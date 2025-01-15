@@ -14,6 +14,7 @@ import (
 	"github.com/errata-ai/ini"
 
 	"github.com/errata-ai/vale/v3/internal/glob"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 var (
@@ -89,7 +90,7 @@ func FindAsset(cfg *Config, path string) string {
 
 	for _, p := range cfg.SearchPaths() {
 		inPath := filepath.Join(p, path)
-		if FileExists(inPath) {
+		if system.FileExists(inPath) {
 			return inPath
 		}
 	}
@@ -99,7 +100,7 @@ func FindAsset(cfg *Config, path string) string {
 	}
 
 	p := determinePath(cfg.Flags.Path, path)
-	if FileExists(p) {
+	if system.FileExists(p) {
 		return p
 	}
 
@@ -118,7 +119,7 @@ func getConfigAsset(target string, paths, dirs []string) string {
 	for _, p := range paths {
 		for _, dir := range dirs {
 			path := filepath.Join(p, dir, target)
-			if FileExists(path) {
+			if system.FileExists(path) {
 				return path
 			}
 		}
@@ -249,7 +250,7 @@ func NewConfig(flags *CLIFlags) (*Config, error) {
 	cfg.ConfigFiles = []string{}
 
 	found, _ := DefaultStylesPath()
-	if !flags.IgnoreGlobal && IsDir(found) {
+	if !flags.IgnoreGlobal && system.IsDir(found) {
 		cfg.AddStylesPath(found)
 	}
 
@@ -292,7 +293,7 @@ func (c *Config) Root() (string, error) {
 		return "", err
 	}
 
-	if !FileExists(root) {
+	if !system.FileExists(root) {
 		return "", fmt.Errorf("no .vale.ini file found")
 	}
 
@@ -365,7 +366,7 @@ func pipeConfig(cfg *Config) ([]string, error) {
 	var sources []string
 
 	pipeline := filepath.Join(cfg.StylesPath(), ".vale-config")
-	if IsDir(pipeline) && len(cfg.Flags.Sources) == 0 {
+	if system.IsDir(pipeline) && len(cfg.Flags.Sources) == 0 {
 		configs, err := os.ReadDir(pipeline)
 		if err != nil {
 			return sources, err

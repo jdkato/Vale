@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 var TestData = "../../testdata/pkg"
@@ -54,11 +55,11 @@ func TestLibrary(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !core.IsDir(filepath.Join(path, "write-good")) {
+	if !system.IsDir(filepath.Join(path, "write-good")) {
 		t.Fatal("unable to find 'write-good' in StylesPath")
 	}
 
-	if !core.FileExists(filepath.Join(path, "write-good", "E-Prime.yml")) {
+	if !system.FileExists(filepath.Join(path, "write-good", "E-Prime.yml")) {
 		t.Fatal("unable to find 'E-Prime' in StylesPath")
 	}
 }
@@ -79,11 +80,11 @@ func TestLocalZip(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !core.IsDir(filepath.Join(path, "write-good")) {
+	if !system.IsDir(filepath.Join(path, "write-good")) {
 		t.Fatal("unable to find 'write-good' in StylesPath")
 	}
 
-	if !core.FileExists(filepath.Join(path, "write-good", "E-Prime.yml")) {
+	if !system.FileExists(filepath.Join(path, "write-good", "E-Prime.yml")) {
 		t.Fatal("unable to find 'E-Prime' in StylesPath")
 	}
 }
@@ -104,11 +105,11 @@ func TestLocalDir(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !core.IsDir(filepath.Join(path, "write-good")) {
+	if !system.IsDir(filepath.Join(path, "write-good")) {
 		t.Fatal("unable to find 'write-good' in StylesPath")
 	}
 
-	if !core.FileExists(filepath.Join(path, "write-good", "E-Prime.yml")) {
+	if !system.FileExists(filepath.Join(path, "write-good", "E-Prime.yml")) {
 		t.Fatal("unable to find 'E-Prime' in StylesPath")
 	}
 }
@@ -129,12 +130,12 @@ func TestLocalComplete(t *testing.T) { //nolint:dupl
 		t.Fatal(err)
 	}
 
-	if !core.IsDir(filepath.Join(path, "ISC")) {
+	if !system.IsDir(filepath.Join(path, "ISC")) {
 		t.Fatal("unable to find 'ISC' in StylesPath")
 	}
 
 	vocab := filepath.Join(path, "Vocab", "ISC_General", "accept.txt")
-	if !core.FileExists(vocab) {
+	if !system.FileExists(vocab) {
 		t.Fatal("unable to find 'ISC_General' in Vocab")
 	}
 
@@ -165,12 +166,12 @@ func TestLocalOnlyStyles(t *testing.T) { //nolint:dupl
 		t.Fatal(err)
 	}
 
-	if !core.IsDir(filepath.Join(path, "ISC")) {
+	if !system.IsDir(filepath.Join(path, "ISC")) {
 		t.Fatal("unable to find 'ISC' in StylesPath")
 	}
 
 	vocab := filepath.Join(path, "Vocab", "ISC_General", "accept.txt")
-	if !core.FileExists(vocab) {
+	if !system.FileExists(vocab) {
 		t.Fatal("unable to find 'ISC_General' in Vocab")
 	}
 
@@ -201,15 +202,15 @@ func TestV3Pkg(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !core.IsDir(filepath.Join(path, "config")) {
+	if !system.IsDir(filepath.Join(path, "config")) {
 		t.Fatal("unable to find 'config' in StylesPath")
 	}
 
-	if !core.FileExists(filepath.Join(path, core.VocabDir, "Basic", "accept.txt")) {
+	if !system.FileExists(filepath.Join(path, core.VocabDir, "Basic", "accept.txt")) {
 		t.Fatal("unable to find 'accept.txt'")
 	}
 
-	if !core.FileExists(filepath.Join(path, core.TmplDir, "t.tmpl")) {
+	if !system.FileExists(filepath.Join(path, core.TmplDir, "t.tmpl")) {
 		t.Fatal("unable to find 't.tmpl'")
 	}
 }

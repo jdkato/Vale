@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // Style represents an externally-hosted style.
@@ -80,7 +81,7 @@ func fetch(src, dst string) error {
 	}
 
 	resp.Body.Close()
-	return unarchive(tmpfile.Name(), dst)
+	return system.Unarchive(tmpfile.Name(), dst)
 }
 
 func install(args []string, flags *core.CLIFlags) error {
@@ -90,7 +91,7 @@ func install(args []string, flags *core.CLIFlags) error {
 	}
 
 	style := filepath.Join(cfg.StylesPath(), args[0])
-	if core.IsDir(style) {
+	if system.IsDir(style) {
 		os.RemoveAll(style) // Remove existing version
 	}
 

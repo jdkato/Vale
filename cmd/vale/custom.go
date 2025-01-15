@@ -8,6 +8,7 @@ import (
 	"github.com/Masterminds/sprig/v3"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // ProcessedFile represents a file that Vale has linted.
@@ -27,7 +28,7 @@ func PrintCustomAlerts(linted []*core.File, cfg *core.Config) (bool, error) {
 	var alertCount int
 
 	path := cfg.Flags.Output
-	if !core.FileExists(path) {
+	if !system.FileExists(path) {
 		path = core.FindAsset(cfg, path)
 	}
 

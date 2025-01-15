@@ -7,9 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
-	"syscall"
 	"unicode"
 
 	"github.com/errata-ai/vale/v3/internal/nlp"
@@ -183,18 +181,6 @@ func Indent(text, indent string) string {
 	return result[:len(result)-1]
 }
 
-// IsDir determines if the path given by `filename` is a directory.
-func IsDir(filename string) bool {
-	fi, err := os.Stat(filename)
-	return err == nil && fi.IsDir()
-}
-
-// FileExists determines if the path given by `filename` exists.
-func FileExists(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil
-}
-
 // StringInSlice determines if `slice` contains the string `a`.
 func StringInSlice(a string, slice []string) bool {
 	for _, b := range slice {
@@ -332,24 +318,6 @@ func ReplaceExt(fp string, formats map[string]string) string {
 	}
 
 	return fp
-}
-
-// FindProcess checks if a process with the given PID exists.
-func FindProcess(pid int) *os.Process {
-	if pid <= 0 {
-		return nil
-	}
-
-	p, err := os.FindProcess(pid)
-	if runtime.GOOS != "windows" {
-		err = p.Signal(os.Signal(syscall.Signal(0)))
-	}
-
-	if err != nil {
-		return nil
-	}
-
-	return p
 }
 
 // UniqueStrings returns a new slice with all duplicate strings removed.

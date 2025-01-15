@@ -1,12 +1,69 @@
 package lint
 
 import (
+	"bytes"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"testing"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
+
+func TestSymlinkFixture(t *testing.T) {
+	fixture := "../../testdata/fixtures/misc/symlinks"
+
+	targetSrc := system.AbsPath(filepath.Join(fixture, "Symlinked"))
+	targetDst := system.AbsPath(filepath.Join(fixture, "styles", "Symlinked"))
+
+	if _, err := os.Stat(targetSrc); os.IsNotExist(err) {
+		t.Fatalf("Target source does not exist: %v", targetSrc)
+	}
+
+	if err := os.Symlink(targetSrc, targetDst); err != nil {
+		t.Fatalf("Failed to create symlink: %v", err)
+	}
+
+	t.Cleanup(func() {
+		err := os.Remove(targetDst)
+		if err != nil {
+			t.Fatalf("Failed to remove symlink: %v", err)
+		}
+	})
+
+	info, err := os.Lstat(targetDst)
+	if err != nil {
+		t.Fatalf("Failed to stat symlink: %v", err)
+	}
+
+	if info.Mode()&os.ModeSymlink == 0 {
+		t.Fatalf("Expected %v to be a symlink", targetDst)
+	}
+
+	resolvedPath, err := os.Readlink(targetDst)
+	if err != nil {
+		t.Fatalf("Failed to read symlink: %v", err)
+	}
+
+	if resolvedPath != targetSrc {
+		t.Fatalf("Symlink points to %v, expected %v", resolvedPath, targetSrc)
+	}
+
+	// Call Vale on the symlinked file.
+	cmd := exec.Command("vale", "--output=JSON", "--no-global", "test.md")
+	cmd.Dir = fixture
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("Failed to run Vale: %s", string(out))
+	}
+
+	if !bytes.Contains(out, []byte("Symlinked")) {
+		t.Fatalf("Expected output from Vale, got %s", string(out))
+	}
+}
 
 func TestGenderBias(t *testing.T) {
 	reToMatches := map[string][]string{

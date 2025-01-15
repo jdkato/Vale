@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 var testData = filepath.Join("..", "..", "testdata")
@@ -18,7 +20,7 @@ func TestInitCfg(t *testing.T) {
 	// In v3.0, these should have defaults.
 	if path == "" {
 		t.Fatal("StylesPath is empty")
-	} else if !IsDir(path) {
+	} else if !system.IsDir(path) {
 		t.Fatalf("%s is not a directory", path)
 	}
 }

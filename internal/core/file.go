@@ -14,6 +14,7 @@ import (
 
 	"github.com/errata-ai/vale/v3/internal/glob"
 	"github.com/errata-ai/vale/v3/internal/nlp"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 var commentControlRE = regexp.MustCompile(`^vale (.+\..+|[^.]+) = (YES|NO|on|off)$`)
@@ -53,7 +54,7 @@ func NewFile(src string, config *Config) (*File, error) {
 	var fbytes []byte
 	var lookup bool
 
-	if FileExists(src) {
+	if system.FileExists(src) {
 		fbytes, _ = os.ReadFile(src)
 		if config.Flags.InExt != ".txt" {
 			ext, format = FormatFromExt(config.Flags.InExt, config.Formats)

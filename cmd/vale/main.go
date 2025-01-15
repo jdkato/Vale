@@ -9,6 +9,7 @@ import (
 
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/lint"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // version is set during the release build process.
@@ -23,8 +24,8 @@ func stat() bool {
 }
 
 func looksLikeStdin(s string) int {
-	isDir := core.IsDir(s)
-	if !(core.FileExists(s) || isDir) && s != "" {
+	isDir := system.IsDir(s)
+	if !(system.FileExists(s) || isDir) && s != "" {
 		return 1
 	} else if isDir {
 		return 0

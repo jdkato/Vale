@@ -14,6 +14,7 @@ import (
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/nlp"
 	"github.com/errata-ai/vale/v3/internal/spell"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 var defaultFilters = []*regexp.Regexp{
@@ -138,7 +139,7 @@ func NewSpelling(cfg *core.Config, generic baseCheck, path string) (Spelling, er
 			}
 
 			for _, p := range paths {
-				if err = model.AddWordListFile(p); err != nil && core.FileExists(p) {
+				if err = model.AddWordListFile(p); err != nil && system.FileExists(p) {
 					return rule, err
 				}
 			}
@@ -211,7 +212,7 @@ func makeSpeller(s *Spelling, cfg *core.Config, rulePath string) (*spell.Checker
 	affloc := core.FindAsset(cfg, s.Aff)
 	dicloc := core.FindAsset(cfg, s.Dic)
 
-	if core.FileExists(affloc) && core.FileExists(dicloc) {
+	if system.FileExists(affloc) && system.FileExists(dicloc) {
 		return spell.NewChecker(spell.UsingDictionaryByPath(dicloc, affloc))
 	}
 
@@ -230,7 +231,7 @@ func makeSpeller(s *Spelling, cfg *core.Config, rulePath string) (*spell.Checker
 		}
 
 		for _, p := range paths {
-			if core.IsDir(p) {
+			if system.IsDir(p) {
 				options = append(options, spell.WithPath(p))
 				found = true
 				break

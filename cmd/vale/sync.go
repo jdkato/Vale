@@ -9,13 +9,14 @@ import (
 	cp "github.com/otiai10/copy"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 func initPath(cfg *core.Config) error {
 	// The first entry is always the default `StylesPath`.
 	stylesPath := cfg.StylesPath()
 
-	if !core.IsDir(stylesPath) {
+	if !system.IsDir(stylesPath) {
 		if err := os.MkdirAll(cfg.StylesPath(), os.ModePerm); err != nil {
 			e := fmt.Errorf("unable to initialize StylesPath (value = '%s')", cfg.StylesPath())
 			return core.NewE100("initPath", e)
@@ -32,13 +33,13 @@ func initPath(cfg *core.Config) error {
 }
 
 func readPkg(pkg, path string, idx int) error {
-	if core.IsPhrase(pkg) && !core.IsDir(pkg) {
+	if core.IsPhrase(pkg) && !system.IsDir(pkg) {
 		entry := inLibrary(pkg, path)
 		if entry != "" {
 			return download(pkg, entry, path, idx)
 		}
 	}
-	return loadPkg(fileNameWithoutExt(pkg), pkg, path, idx)
+	return loadPkg(system.FileNameWithoutExt(pkg), pkg, path, idx)
 }
 
 func loadPkg(name, urlOrPath, styles string, index int) error {
@@ -61,7 +62,7 @@ func loadLocalZipPkg(name, pkgPath, styles string, index int) error {
 		return err
 	}
 
-	if err = unarchive(pkgPath, dir); err != nil {
+	if err = system.Unarchive(pkgPath, dir); err != nil {
 		return err
 	}
 
@@ -90,12 +91,12 @@ func installPkg(dir, name, styles string, index int) error {
 	pipe := filepath.Join(styles, core.PipeDir)
 	cfg := filepath.Join(root, ".vale.ini")
 
-	if !core.IsDir(path) && !core.FileExists(cfg) {
+	if !system.IsDir(path) && !system.FileExists(cfg) {
 		return moveAsset(name, dir, styles) // style-only
 	}
 
 	// StylesPath
-	if core.IsDir(path) {
+	if system.IsDir(path) {
 		if err := moveDir(path, styles); err != nil {
 			return err
 		}
@@ -106,7 +107,7 @@ func installPkg(dir, name, styles string, index int) error {
 		// $StylesPath/config directory.
 		for _, dir := range core.ConfigDirs {
 			loc1 := filepath.Join(path, dir)
-			if core.IsDir(loc1) {
+			if system.IsDir(loc1) {
 				loc2 := filepath.Join(styles, dir)
 				if err := moveDir(loc1, loc2); err != nil {
 					return err
@@ -116,7 +117,7 @@ func installPkg(dir, name, styles string, index int) error {
 	}
 
 	// .vale.ini
-	if core.FileExists(cfg) {
+	if system.FileExists(cfg) {
 		pkgs, err := core.GetPackages(cfg)
 		if err != nil {
 			return err
@@ -161,7 +162,7 @@ func moveAsset(name, old, new string) error { //nolint:predeclared
 	src := filepath.Join(old, name)
 	dst := filepath.Join(new, name)
 
-	if core.FileExists(dst) || core.IsDir(dst) {
+	if system.FileExists(dst) || system.IsDir(dst) {
 		if err := os.RemoveAll(dst); err != nil {
 			return err
 		}
