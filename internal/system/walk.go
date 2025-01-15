@@ -7,23 +7,22 @@ import (
 
 func walk(filename string, linkDirname string, walkFn filepath.WalkFunc) error {
 	symWalkFunc := func(path string, info os.FileInfo, err error) error {
-
-		if fname, err := filepath.Rel(filename, path); err == nil {
+		if fname, ferr := filepath.Rel(filename, path); ferr == nil {
 			path = filepath.Join(linkDirname, fname)
 		} else {
-			return err
+			return ferr
 		}
 
 		if err == nil && info.Mode()&os.ModeSymlink == os.ModeSymlink {
-			finalPath, err := filepath.EvalSymlinks(path)
-			if err != nil {
-				return err
+			finalPath, ferr := filepath.EvalSymlinks(path)
+			if ferr != nil {
+				return ferr
 			}
-			info, err := os.Lstat(finalPath)
-			if err != nil {
+			linfo, ierr := os.Lstat(finalPath)
+			if ierr != nil {
 				return walkFn(path, info, err)
 			}
-			if info.IsDir() {
+			if linfo.IsDir() {
 				return walk(finalPath, path, walkFn)
 			}
 		}
