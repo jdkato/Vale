@@ -36,16 +36,17 @@ func (l *Linter) lintScopedValues(f *core.File, values []core.ScopedValues) erro
 
 	wholeFile := f.Content
 	last := 0
-	index := 0
 
 	for _, match := range values {
 		l.SetMetaScope(match.Scope)
+
+		seen := make(map[string]int)
 		for _, v := range match.Values {
-			i, line := findLineBySubstring(wholeFile, v, index)
-			if i == 0 {
+			i, line := findLineBySubstring(wholeFile, v, seen)
+			if i < 0 {
 				return core.NewE100(f.Path, fmt.Errorf("'%s' not found", v))
 			}
-			index = i
+			seen[line] = i
 
 			f.SetText(v)
 			f.SetNormedExt(match.Format)
@@ -77,18 +78,20 @@ func (l *Linter) lintScopedValues(f *core.File, values []core.ScopedValues) erro
 	return err
 }
 
-func findLineBySubstring(s, sub string, last int) (int, string) {
+func findLineBySubstring(s, sub string, seen map[string]int) (int, string) {
 	if strings.Count(sub, "\n") > 0 {
 		sub = strings.Split(sub, "\n")[0]
 	}
 
 	for i, line := range strings.Split(s, "\n") {
-		if i >= last && strings.Contains(line, sub) {
-			return i + 1, line
+		if strings.Contains(line, sub) {
+			if j, ok := seen[line]; !ok || j-1 != i {
+				return i + 1, line
+			}
 		}
 	}
 
-	return 0, ""
+	return -1, ""
 }
 
 func adjustPos(alerts []core.Alert, last, line, padding int) []core.Alert {

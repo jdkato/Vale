@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/tomwright/dasel/v2"
@@ -13,6 +14,7 @@ import (
 
 type DaselValue = map[string]any
 
+var blockChompingRegex = regexp.MustCompile(`(\w: )>(-?\s*)`)
 var blueprintEngines = []string{"tree-sitter", "dasel"}
 
 // A Scope is a single query that we want to run against a document.
@@ -73,7 +75,7 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 
 	value, err := fileToValue(f)
 	if err != nil {
-		return nil, NewE100(f.Path, err)
+		return nil, err
 	}
 
 	for _, s := range b.Scopes {
@@ -100,14 +102,22 @@ func (b *Blueprint) Apply(f *File) ([]ScopedValues, error) {
 func fileToValue(f *File) (DaselValue, error) {
 	var value DaselValue
 
-	contents := []byte(f.Content)
+	// We replace block chomping indicators with a pipe to ensure that
+	// newlines are preserved.
+	//
+	// See https://yaml-multiline.info for more information.
+	text := blockChompingRegex.ReplaceAllStringFunc(f.Content, func(match string) string {
+		return blockChompingRegex.ReplaceAllString(match, `${1}|${2}`)
+	})
+
+	contents := []byte(text)
 	switch f.RealExt {
 	case ".json":
 		err := json.Unmarshal(contents, &value)
 		if err != nil {
 			return nil, err
 		}
-	case ".yml":
+	case ".yml", ".yaml":
 		err := yaml.Unmarshal(contents, &value)
 		if err != nil {
 			return nil, err

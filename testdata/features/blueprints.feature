@@ -8,6 +8,9 @@ Feature: Blueprints
             API.yml:9:70:Vale.Spelling:Did you really mean 'serrver'?
             API.yml:13:17:Vale.Spelling:Did you really mean 'serrver'?
             API.yml:15:70:Vale.Spelling:Did you really mean 'serrver'?
+            Petstore.yaml:15:18:Vale.Spelling:Did you really mean 'Petstore'?
+            Petstore.yaml:29:28:Vale.Spelling:Did you really mean 'Petstore'?
+            Petstore.yaml:407:8:Vale.Spelling:Did you really mean 'nonintegers'?
             Rule.yml:3:39:Vale.Repetition:'can' is repeated!
             test.py:1:3:vale.Annotations:'FIXME' left in text
             test.py:11:3:vale.Annotations:'XXX' left in text

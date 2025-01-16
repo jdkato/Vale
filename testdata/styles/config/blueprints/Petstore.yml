@@ -1,0 +1,11 @@
+engine: dasel
+scopes:
+  - name: title
+    expr: info.title
+
+  - expr: info.description
+    type: md
+
+  - expr: tags.all().description
+
+  - expr: paths.all().all().property(summary,description)
