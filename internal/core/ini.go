@@ -15,22 +15,6 @@ import (
 
 var coreError = "'%s' is a core option; it should be defined above any syntax-specific options (`[...]`)."
 
-func determinePath(configPath string, keyPath string) string {
-	// expand tilde at this point as this is where user-provided paths are provided
-	keyPath = normalizePath(keyPath)
-	if !system.IsDir(configPath) {
-		configPath = filepath.Dir(configPath)
-	}
-	sep := string(filepath.Separator)
-	abs, _ := filepath.Abs(keyPath)
-	rel := strings.TrimRight(keyPath, sep)
-	if abs != rel || !strings.Contains(keyPath, sep) {
-		// The path was relative
-		return filepath.Join(configPath, keyPath)
-	}
-	return abs
-}
-
 func mergeValues(shadows []string) []string {
 	values := []string{}
 	for _, v := range shadows {
@@ -130,7 +114,7 @@ var syntaxOpts = map[string]func(string, *ini.Section, *Config) error{
 	},
 	"Transform": func(label string, sec *ini.Section, cfg *Config) error { //nolint:unparam
 		candidate := sec.Key("Transform").String()
-		cfg.Stylesheets[label] = determinePath(cfg.Flags.Path, candidate)
+		cfg.Stylesheets[label] = system.DeterminePath(cfg.Flags.Path, candidate)
 		return nil
 
 	},
@@ -188,13 +172,13 @@ var coreOpts = map[string]func(*ini.Section, *Config) error{
 			// In such a case, there are three options: (1) both files define a
 			// `StylesPath`, (2) only one file defines a `StylesPath`, or (3)
 			// neither file defines a `StylesPath`.
-			basePath := determinePath(files[0], filepath.FromSlash(paths[0]))
-			mockPath := determinePath(files[1], filepath.FromSlash(paths[0]))
+			basePath := system.DeterminePath(files[0], filepath.FromSlash(paths[0]))
+			mockPath := system.DeterminePath(files[1], filepath.FromSlash(paths[0]))
 			// ^ This case handles the situation where both configs define the
 			// same StylesPath (e.g., `StylesPath = styles`).
 			if len(paths) == 2 {
-				basePath = determinePath(files[0], filepath.FromSlash(paths[0]))
-				mockPath = determinePath(files[1], filepath.FromSlash(paths[1]))
+				basePath = system.DeterminePath(files[0], filepath.FromSlash(paths[0]))
+				mockPath = system.DeterminePath(files[1], filepath.FromSlash(paths[1]))
 			}
 			cfg.AddStylesPath(basePath)
 			cfg.AddStylesPath(mockPath)
@@ -202,7 +186,7 @@ var coreOpts = map[string]func(*ini.Section, *Config) error{
 			// In this case, we have a local configuration file (no default)
 			// that defines a `StylesPath`.
 			candidate := filepath.FromSlash(paths[len(paths)-1])
-			path := determinePath(cfg.ConfigFile(), candidate)
+			path := system.DeterminePath(cfg.ConfigFile(), candidate)
 
 			cfg.AddStylesPath(path)
 			if !system.FileExists(path) {

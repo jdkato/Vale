@@ -343,7 +343,7 @@ func (l *Linter) match(s string) bool {
 }
 
 func (l *Linter) skip(old string) bool {
-	ref := filepath.ToSlash(core.ReplaceExt(old, l.Manager.Config.Formats))
+	ref := filepath.ToSlash(system.ReplaceFileExt(old, l.Manager.Config.Formats))
 
 	if !l.match(old) && !l.match(ref) {
 		return true

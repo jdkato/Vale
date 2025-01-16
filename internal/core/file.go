@@ -69,7 +69,7 @@ func NewFile(src string, config *Config) (*File, error) {
 	}
 	filepaths := []string{src}
 
-	normed := ReplaceExt(src, config.Formats)
+	normed := system.ReplaceFileExt(src, config.Formats)
 	if normed != src {
 		// NOTE: In retrospect, this was a mistake: we should NOT normalize
 		// the extension with respect to the `.vale.ini` file.

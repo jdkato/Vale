@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 func TestFormatFromExt(t *testing.T) {
@@ -61,7 +63,7 @@ func TestNormalizePath(t *testing.T) {
 	}
 	stylesPathInput := filepath.FromSlash("~/.vale")
 	expectedOutput := filepath.Join(homedir, ".vale")
-	result := normalizePath(stylesPathInput)
+	result := system.NormalizePath(stylesPathInput)
 	if result != expectedOutput {
 		t.Errorf("expected = %v, got = %v", expectedOutput, result)
 	}
@@ -71,7 +73,7 @@ func TestNormalizePath(t *testing.T) {
 		return
 	}
 	expectedOutput = stylesPathInput
-	result = normalizePath(stylesPathInput)
+	result = system.NormalizePath(stylesPathInput)
 	if result != expectedOutput {
 		t.Errorf("expected = %v, got = %v", expectedOutput, result)
 	}
@@ -81,7 +83,7 @@ func TestNormalizePath(t *testing.T) {
 		return
 	}
 	expectedOutput = stylesPathInput
-	result = normalizePath(stylesPathInput)
+	result = system.NormalizePath(stylesPathInput)
 	if result != expectedOutput {
 		t.Errorf("expected = %v, got = %v", expectedOutput, result)
 	}

@@ -9,13 +9,14 @@ import (
 	"strings"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 func (l Linter) lintDITA(file *core.File) error {
 	var out bytes.Buffer
 	var htmlFile string
 
-	dita := core.Which([]string{"dita", "dita.bat"})
+	dita := system.Which([]string{"dita", "dita.bat"})
 	if dita == "" {
 		return core.NewE100("lintDITA", errors.New("dita not found"))
 	}

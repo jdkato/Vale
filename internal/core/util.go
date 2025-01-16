@@ -3,9 +3,6 @@ package core
 import (
 	"bytes"
 	"fmt"
-	"os"
-	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"unicode"
@@ -119,17 +116,6 @@ func InRange(n int, r []int) bool {
 	return len(r) == 2 && (r[0] <= n && n <= r[1])
 }
 
-// Which checks for the existence of any command in `cmds`.
-func Which(cmds []string) string {
-	for _, cmd := range cmds {
-		path, err := exec.LookPath(cmd)
-		if err == nil {
-			return path
-		}
-	}
-	return ""
-}
-
 // CondSprintf is sprintf, ignores extra arguments.
 func CondSprintf(format string, v ...interface{}) string {
 	v = append(v, "")
@@ -233,20 +219,6 @@ func SplitLines(data []byte, atEOF bool) (adv int, token []byte, err error) { //
 	return 0, nil, nil
 }
 
-func normalizePath(path string) string {
-	// expand tilde
-	homedir, err := os.UserHomeDir()
-	if err != nil {
-		return path
-	}
-	if path == "~" {
-		return homedir
-	} else if strings.HasPrefix(path, filepath.FromSlash("~/")) {
-		path = filepath.Join(homedir, path[2:])
-	}
-	return path
-}
-
 func TextToContext(text string, meta *nlp.Info) []nlp.TaggedWord {
 	context := []nlp.TaggedWord{}
 
@@ -302,23 +274,6 @@ func HasAnySuffix(s string, suffixes []string) bool {
 		}
 	}
 	return false
-}
-
-// ReplaceExt replaces the extension of `fp` with `ext` if the extension of
-// `fp` is in `formats`.
-//
-// This is used in places where we need to normalize file extensions (e.g.,
-// `foo.mdx` -> `foo.md`) in order to respect format associations.
-func ReplaceExt(fp string, formats map[string]string) string {
-	var ext string
-
-	old := filepath.Ext(fp)
-	if normed, found := formats[strings.Trim(old, ".")]; found {
-		ext = "." + normed
-		fp = fp[0:len(fp)-len(old)] + ext
-	}
-
-	return fp
 }
 
 // UniqueStrings returns a new slice with all duplicate strings removed.

@@ -10,6 +10,7 @@ import (
 
 	"github.com/errata-ai/vale/v3/internal/core"
 	"github.com/errata-ai/vale/v3/internal/nlp"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // NOTE: Asciidoctor converts "'" to "’".
@@ -31,7 +32,7 @@ func (l *Linter) lintADoc(f *core.File) error {
 	var html string
 	var err error
 
-	exe := core.Which([]string{"asciidoctor"})
+	exe := system.Which([]string{"asciidoctor"})
 	if exe == "" {
 		return core.NewE100("lintAdoc", errors.New("asciidoctor not found"))
 	}

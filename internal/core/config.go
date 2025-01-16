@@ -99,7 +99,7 @@ func FindAsset(cfg *Config, path string) string {
 		return p
 	}
 
-	p := determinePath(cfg.Flags.Path, path)
+	p := system.DeterminePath(cfg.Flags.Path, path)
 	if system.FileExists(p) {
 		return p
 	}

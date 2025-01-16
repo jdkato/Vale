@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/errata-ai/vale/v3/internal/core"
+	"github.com/errata-ai/vale/v3/internal/system"
 )
 
 // XML configuration.
@@ -23,7 +24,7 @@ func (l Linter) lintXML(file *core.File) error {
 	var out bytes.Buffer
 	var eut bytes.Buffer
 
-	xsltproc := core.Which([]string{"xsltproc", "xsltproc.exe"})
+	xsltproc := system.Which([]string{"xsltproc", "xsltproc.exe"})
 	if xsltproc == "" {
 		return core.NewE100("lintXML", errors.New("xsltproc not found"))
 	} else if file.Transform == "" {
