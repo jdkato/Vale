@@ -10,7 +10,7 @@ mdx = md
 [*]
 BasedOnStyles = Vale
 
-[*.{md,rst,adoc,org}]
+[*.{md,rst,adoc,org,mdx}]
 TokenIgnores = (\$+?[^\d][^\n$]+\$+?), (<http[^\n]+>+?)
 IgnorePatterns = (?s) *({{< ?file(?:-excerpt)? [^>]* ?>}}.*?{{< ?/file(?:-excerpt)? ?>}})
 

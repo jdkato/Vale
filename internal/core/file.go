@@ -67,28 +67,9 @@ func NewFile(src string, config *Config) (*File, error) {
 		src = "stdin" + config.Flags.InExt
 		lookup = true
 	}
-	filepaths := []string{src}
 
+	filepaths := []string{src}
 	normed := system.ReplaceFileExt(src, config.Formats)
-	if normed != src {
-		// NOTE: In retrospect, this was a mistake: we should NOT normalize
-		// the extension with respect to the `.vale.ini` file.
-		//
-		// The `.vale.ini` file should reflect the actual file extensions (as
-		// they appear on disk). Unfortunately, changing this behavior entirely
-		// would break backwards compatibility with many configurations.
-		//
-		// So, as a workaround, we check both cases. This means that there are
-		// two cases:
-		//
-		// - No assigned format: No change (no normed path).
-		//
-		// - Assigned format: We can reference the file using the normed path
-		// (old behavior) or the actual path (desired behavior).
-		//
-		// See also `Linter.skip`.
-		filepaths = append(filepaths, normed)
-	}
 
 	baseStyles := config.GBaseStyles
 	checks := make(map[string]bool)
