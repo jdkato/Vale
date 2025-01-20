@@ -72,6 +72,14 @@ func addExceptions(s *Spelling, generic baseCheck, cfg *core.Config) error { //n
 	}
 
 	for _, term := range cfg.AcceptedTokens {
+		// NOTE: This is used to ensure that we are excluding whole words
+		// rather than substrings.
+		//
+		// The assumption is that, for spell checking, we don't want to
+		// flag words that are part of a larger word.
+		if !strings.HasPrefix(term, "\b") && !strings.HasSuffix(term, "\b") {
+			term = `\b` + term + `\b`
+		}
 		s.Exceptions = append(s.Exceptions, term)
 		s.exceptRe = regexp2.MustCompileStd(
 			ignoreCase + strings.Join(s.Exceptions, "|"))
