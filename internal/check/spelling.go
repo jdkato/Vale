@@ -249,6 +249,9 @@ func makeSpeller(s *Spelling, cfg *core.Config, rulePath string) (*spell.Checker
 		if !found {
 			return nil, errors.New("unable to resolve dicpath")
 		}
+	} else {
+		options = append(options, spell.WithPath(
+			filepath.Join(cfg.StylesPath(), core.DictDir)))
 	}
 
 	if len(s.Dictionaries) > 0 {
