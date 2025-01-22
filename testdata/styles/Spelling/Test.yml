@@ -5,6 +5,5 @@ custom: true
 append: false
 action:
   name: suggest
-dicpath: medical
 dictionaries:
   - test

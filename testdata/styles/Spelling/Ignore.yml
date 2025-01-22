@@ -4,7 +4,6 @@ message: "'%s' is a typo!"
 custom: true
 action:
   name: suggest
-dicpath: medical
 dictionaries:
   - en_US
   - en_medical
