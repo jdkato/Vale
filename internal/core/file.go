@@ -74,11 +74,10 @@ func NewFile(src string, config *Config) (*File, error) {
 	baseStyles := config.GBaseStyles
 	checks := make(map[string]bool)
 
-	names := []string{}
 	for _, fp := range filepaths {
 		for _, sec := range config.StyleKeys {
 			if pat, found := config.SecToPat[sec]; found && pat.Match(fp) {
-				names = append(names, config.SBaseStyles[sec]...)
+				baseStyles = config.SBaseStyles[sec]
 			}
 		}
 
@@ -89,10 +88,6 @@ func NewFile(src string, config *Config) (*File, error) {
 				}
 			}
 		}
-	}
-
-	if len(names) > 0 {
-		baseStyles = UniqueStrings(names)
 	}
 
 	lang := "en"
