@@ -1,9 +1,8 @@
 package core
 
 import (
+	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_processConfig_commentDelimiters(t *testing.T) {
@@ -18,7 +17,7 @@ func Test_processConfig_commentDelimiters(t *testing.T) {
 CommentDelimiters = "{/*,*/}"
 `,
 			expected: map[string][2]string{
-				"*.md": [2]string{"{/*", "*/}"},
+				"*.md": {"{/*", "*/}"},
 			},
 		},
 		{
@@ -33,13 +32,26 @@ TokenIgnores = (\$+[^\n$]+\$+)
 	for _, c := range cases {
 		t.Run(c.description, func(t *testing.T) {
 			uCfg, err := shadowLoad([]byte(c.body))
-			assert.NoError(t, err)
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			conf, err := NewConfig(&CLIFlags{})
-			assert.NoError(t, err)
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			_, err = processConfig(uCfg, conf, false)
-			assert.NoError(t, err)
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			actual := conf.CommentDelimiters
-			assert.Equal(t, c.expected, actual)
+			for k, v := range c.expected {
+				if actual[k] != v {
+					t.Errorf("expected %v, but got %v", v, actual[k])
+				}
+			}
 		})
 	}
 }
@@ -86,11 +98,19 @@ CommentDelimiters = "{/*"
 	for _, c := range cases {
 		t.Run(c.description, func(t *testing.T) {
 			uCfg, err := shadowLoad([]byte(c.body))
-			assert.NoError(t, err)
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			conf, err := NewConfig(&CLIFlags{})
-			assert.NoError(t, err)
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			_, err = processConfig(uCfg, conf, false)
-			assert.ErrorContains(t, err, c.expectedErr)
+			if !strings.Contains(err.Error(), c.expectedErr) {
+				t.Errorf("expected %v, but got %v", c.expectedErr, err.Error())
+			}
 		})
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/errata-ai/vale/v3/internal/core"
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_applyPatterns(t *testing.T) {
@@ -20,7 +19,7 @@ func Test_applyPatterns(t *testing.T) {
 			description: "MDX comment in markdown, custom comment delimiter",
 			conf: core.Config{
 				CommentDelimiters: map[string][2]string{
-					".md": [2]string{"{/*", "*/}"},
+					".md": {"{/*", "*/}"},
 				},
 			},
 			exts: extensionConfig{".md", ".md"},
@@ -74,7 +73,7 @@ This is the intro pagragraph.
 			description: "multiline MDX comment in markdown, custom comment delimiter",
 			conf: core.Config{
 				CommentDelimiters: map[string][2]string{
-					".md": [2]string{"{/*", "*/}"},
+					".md": {"{/*", "*/}"},
 				},
 			},
 			exts: extensionConfig{".md", ".md"},
@@ -108,7 +107,7 @@ This is a comment
 			content:     "Call \\c func to start the process.",
 			conf: core.Config{
 				TokenIgnores: map[string][]string{
-					"*.cc": []string{`(\\c \w+)`},
+					"*.cc": {`(\\c \w+)`},
 				},
 				Formats: map[string]string{
 					"cc": "md",
@@ -122,8 +121,11 @@ This is a comment
 	for _, c := range cases {
 		t.Run(c.description, func(t *testing.T) {
 			s, err := applyPatterns(&c.conf, c.exts, c.content)
-			assert.NoError(t, err)
-			assert.Equal(t, c.expected, s)
+			if err != nil {
+				t.Fatalf("applyPatterns returned an error: %s", err)
+			} else if s != c.expected {
+				t.Fatalf("Expected '%s', but got '%s'", c.expected, s)
+			}
 		})
 	}
 }
@@ -140,7 +142,7 @@ func Test_applyPatterns_errors(t *testing.T) {
 			description: "only one delimiter",
 			conf: core.Config{
 				CommentDelimiters: map[string][2]string{
-					".md": [2]string{"{/*", ""},
+					".md": {"{/*", ""},
 				},
 			},
 			exts: extensionConfig{".md", ".md"},
@@ -159,7 +161,9 @@ This is the intro pagragraph.
 	for _, c := range cases {
 		t.Run(c.description, func(t *testing.T) {
 			_, err := applyPatterns(&c.conf, c.exts, c.content)
-			assert.ErrorContains(t, err, c.expectedErr)
+			if !strings.Contains(err.Error(), c.expectedErr) {
+				t.Fatalf("Expected '%s', but got '%s'", c.expectedErr, err.Error())
+			}
 		})
 	}
 }
