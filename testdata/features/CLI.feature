@@ -134,7 +134,7 @@ Feature: CLI
         And the exit status should be 0
 
     Scenario: Filter --minAlertLevel
-        When I use filter "min"
+        When I use filter file "min"
         Then the output should contain exactly:
             """
             test.md:1:3:demo.Cap:'intro' should be in title case ('Intro').
@@ -143,7 +143,7 @@ Feature: CLI
         And the exit status should be 1
 
     Scenario: Filter by single scope
-        When I use filter "scope"
+        When I use filter file "scope"
         Then the output should contain exactly:
             """
             test.md:1:3:demo.Cap:'intro' should be in title case ('Intro').
@@ -151,7 +151,7 @@ Feature: CLI
         And the exit status should be 1
 
     Scenario: Filter by multiple levels
-        When I use filter "levels"
+        When I use filter file "levels"
         Then the output should contain exactly:
             """
             test.md:1:3:demo.HeadingStartsWithCapital:'intro' should be capitalized
@@ -160,12 +160,28 @@ Feature: CLI
         And the exit status should be 1
 
     Scenario: Filter by extends
-        When I use filter "extends"
+        When I use filter file "extends"
         Then the output should contain exactly:
             """
             test.md:1:3:demo.HeadingStartsWithCapital:'intro' should be capitalized
             """
         And the exit status should be 0
+
+    Scenario: Filter by extends [expr]
+        When I use filter expr ".Extends in ['existence']"
+        Then the output should contain exactly:
+            """
+            test.md:1:3:demo.HeadingStartsWithCapital:'intro' should be capitalized
+            """
+        And the exit status should be 0
+
+    Scenario: Filter by multiple levels [expr]
+        When I use filter expr ".Level in ['error', 'suggestion'] and .Name != 'demo.Cap'"
+        Then the output should contain exactly:
+            """
+            test.md:1:3:demo.HeadingStartsWithCapital:'intro' should be capitalized
+            test.md:5:8:Vale.Repetition:'is' is repeated!
+            """
 
     Scenario: Script-computed suggestions
         When I fix "script.json"

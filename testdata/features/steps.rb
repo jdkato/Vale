@@ -26,9 +26,14 @@ When(/^I fix "(.*)"$/) do |c|
   step %(I run `#{cmd} fix #{c}`)
 end
 
-When(/^I use filter "(.*)"$/) do |f|
+When(/^I use filter file "(.*)"$/) do |f|
   step %(I cd to "../../fixtures/filters")
   step %(I run `#{cmd} --filter="#{f}.expr" .`)
+end
+
+When(/^I use filter expr "(.*)"$/) do |e|
+  step %(I cd to "../../fixtures/filters")
+  step %(I run `#{cmd} --filter="#{e}" .`)
 end
 
 When(/^I lint simple "(.*)"$/) do |flag|

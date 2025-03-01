@@ -12,25 +12,32 @@ import (
 )
 
 func filter(mgr *Manager) (map[string]Rule, error) {
-	stringOrPath := mgr.Config.Flags.Filter
+	var filter string
 
+	stringOrPath := mgr.Config.Flags.Filter
 	if stringOrPath == "" {
 		return mgr.rules, nil
-	} else if !system.FileExists(stringOrPath) {
-		name := stringOrPath
+	}
 
-		stringOrPath = core.FindAsset(mgr.Config, name)
-		if stringOrPath == "" {
-			return nil, fmt.Errorf("filter '%s' not found", name)
+	if system.FileExists(stringOrPath) {
+		// Case 1: The user has provided a valid path to a filter file.
+		b, err := os.ReadFile(stringOrPath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read filter '%s': %w", stringOrPath, err)
 		}
+		filter = string(b)
+	} else if found := core.FindAsset(mgr.Config, stringOrPath); found != "" {
+		// Case 2: The user has referenced a filter stored on the `StylesPath`.
+		b, err := os.ReadFile(found)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read filter '%s': %w", found, err)
+		}
+		filter = string(b)
+	} else {
+		// Case 3: Assume the  user has provided a string.
+		filter = stringOrPath
 	}
 
-	b, err := os.ReadFile(stringOrPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read filter '%s': %w", stringOrPath, err)
-	}
-
-	filter := string(b)
 	// .Name, .Level -> override
 	// .Scope, .Message, .Description, .Extends, .Link
 	//
