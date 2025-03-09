@@ -249,15 +249,9 @@ Feature: Lint
         When I lint "test.mdx"
         Then the output should contain exactly:
             """
-            test.mdx:3:1:vale.Annotations:'NOTE' left in text
-            test.mdx:32:1:vale.Annotations:'XXX' left in text
-            test.mdx:34:29:vale.Annotations:'TODO' left in text
-            test.mdx:36:3:vale.Annotations:'TODO' left in text
-            test.mdx:36:10:vale.Annotations:'XXX' left in text
-            test.mdx:36:16:vale.Annotations:'FIXME' left in text
-            test.mdx:40:21:vale.Annotations:'FIXME' left in text
-            test.mdx:44:5:vale.Annotations:'TODO' left in text
-            test.mdx:46:3:vale.Annotations:'TODO' left in text
+            test.mdx:13:70:vale.Annotations:'TODO' left in text
+            test.mdx:24:1:vale.Annotations:'TODO' left in text
+            test.mdx:34:26:vale.Annotations:'TODO' left in text
             """
         And the exit status should be 0
 
@@ -370,6 +364,7 @@ Feature: Lint
         Then the output should contain exactly:
             """
             test.mdx:3:1:vale.Annotations:'NOTE' left in text
+            test.mdx:29:5:vale.Annotations:'XXX' left in text
             test.mdx:32:1:vale.Annotations:'XXX' left in text
             test.mdx:34:29:vale.Annotations:'TODO' left in text
             test.mdx:36:3:vale.Annotations:'TODO' left in text

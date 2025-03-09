@@ -4,9 +4,6 @@ MinAlertLevel = suggestion
 IgnoredScopes = code, tt, strong, text.comment.line
 IgnoredClasses = metrics, blurb, alignedsummary
 
-[formats]
-mdx = md
-
 [*]
 BasedOnStyles = Vale
 

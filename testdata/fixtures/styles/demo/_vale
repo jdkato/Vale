@@ -1,9 +1,6 @@
 StylesPath = ../../../styles
 MinAlertLevel = suggestion
 
-[formats]
-mdx = md
-
 [*]
 BasedOnStyles = demo
 

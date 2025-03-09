@@ -46,7 +46,7 @@ func initialPosition(ctx, txt string, a Alert) (int, string) {
 		// by ignoring these inline code spans.
 		//
 		// TODO: What about `scope: raw`?
-		size := len(ctx)
+		size := nlp.StrLen(ctx)
 		for _, fs := range fsi {
 			start := fs[0] - 1
 			end := fs[1] + 1

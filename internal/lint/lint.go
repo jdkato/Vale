@@ -193,6 +193,8 @@ func (l *Linter) lintFile(src string) lintResult {
 			err = l.lintADoc(file)
 		case ".md":
 			err = l.lintMarkdown(file)
+		case ".mdx":
+			err = l.lintMDX(file)
 		case ".rst":
 			err = l.lintRST(file)
 		case ".xml":

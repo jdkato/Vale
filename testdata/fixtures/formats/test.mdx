@@ -1,50 +1,48 @@
-## Introduction
+# Hello, world!
 
-NOTE: This is a very interesting file.
+import {External} from './some/place.js'
+import {Chart} from './chart.js'
+import population from './population.js'
+import XXX from './XXX.js'
 
-```python
-def foo():
-    """
-    NOTE: this is a very important function.
-    """
-    obviously = False
-    very = True
-    return very and obviously
-```
+export const TODO = 3.14
+export const Local = properties => <span style={{color: 'red'}} {...properties} />
 
-As you can see, `very = True`. Here is another interesting codeblock:
+<Chart data={population} label={'Something with ' + pi} />
 
-```go
-// XXX: fix this relatively soon.
-func ExtFromSyntax(name string) string {
-    for XXX, relatively := range LookupSyntaxName {
-        if matched, _ := regexp.MatchString(r, name); matched {
-            return s
-        }
-    }
-    return name
-}
-```
+An <External>XXX</External> component and a <Local>local one</Local> TODO.
 
-    XXX = False
-    # This is a codeblock.
+<div className="note">
+  > Some notable things in a block quote!
+</div>
 
-XXX: This is a very interesting sentence that is not in a block.
+<Welcome name="Venus" />
+<XXX name="Mars" />
 
-this sentence has -- dashes TODO: but it should still work.
+<MyComponent id="123" />
 
-| TODO | XXX | FIXME |
-|:----:|:---:|:-----:|
-| one  | two | three |
+TODO: You can also use objects with components, such as the `TODO` component on
+the `myComponents` object: <myComponents.thisOne />
 
-> **Note**: one two FIXME three.
+<Component
+  open
+  x={1}
+  label={'this is a string, *not* markdown!'}
+  icon={<Icon />}
+/>
 
-[![Boxy Monokai ★ Predawn][img-monokai]][img-monokai]
+Two 🍰 is: {Math.PI * 2}, TODO
 
-is *TODO* by
+{(function () {
+  const TODO = Math.random()
 
-![TODO](/images/logo.png)
+  if (guess > 0.66) {
+    return <span style={{color: 'tomato'}}>Look at us.</span>
+  }
 
-[img-monokai]: https://
+  if (guess > 0.33) {
+    return <span style={{color: 'violet'}}>Who would have guessed?!</span>
+  }
 
-RedHat
+  return <span style={{color: 'goldenrod'}}>Not me.</span>
+})()}

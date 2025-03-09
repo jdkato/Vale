@@ -73,6 +73,7 @@ var FormatByExtension = map[string][]string{
 	`\.(?:js|jsx)$`:                   {".js", "code"},
 	`\.(?:lua)$`:                      {".lua", "code"},
 	`\.(?:md|mdown|markdown|markdn)$`: {".md", "markup"},
+	`\.(?:mdx)$`:                      {".mdx", "markup"},
 	`\.(?:org)$`:                      {".org", "markup"},
 	`\.(?:php)$`:                      {".php", "code"},
 	`\.(?:pl|pm|pod)$`:                {".r", "code"},
