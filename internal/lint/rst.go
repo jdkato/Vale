@@ -1,9 +1,7 @@
 package lint
 
 import (
-	"bytes"
 	"errors"
-	"os/exec"
 	"regexp"
 	"strings"
 
@@ -61,17 +59,10 @@ func (l *Linter) lintRST(f *core.File) error {
 }
 
 func callRst(text, lib, _ string) (string, error) {
-	var out bytes.Buffer
-
-	cmd := exec.Command(lib, rstArgs...)
-	cmd.Stdin = strings.NewReader(text)
-	cmd.Stdout = &out
-
-	if err := cmd.Run(); err != nil {
+	html, err := system.ExecuteWithInput(lib, text, rstArgs...)
+	if err != nil {
 		return "", err
 	}
-
-	html := out.String()
 	html = strings.ReplaceAll(html, "\r", "")
 
 	bodyStart := strings.Index(html, "<body>\n")

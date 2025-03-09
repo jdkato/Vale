@@ -1,10 +1,8 @@
 package lint
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"os/exec"
 	"regexp"
 	"strings"
 
@@ -28,6 +26,14 @@ var adocSanitizer = strings.NewReplacer(
 var reSource = regexp.MustCompile(`\[source,.+\]`)
 var reComment = regexp.MustCompile(`// .+`)
 
+var adocArgs = []string{
+	"-s",
+	"-a",
+	"notitle!",
+	"-a",
+	"attribute-missing=drop",
+}
+
 func (l *Linter) lintADoc(f *core.File) error {
 	var html string
 	var err error
@@ -43,7 +49,7 @@ func (l *Linter) lintADoc(f *core.File) error {
 	}
 	s = adocSanitizer.Replace(s)
 
-	html, err = callAdoc(f, s, exe, l.Manager.Config.Asciidoctor)
+	html, err = callAdoc(s, exe, l.Manager.Config.Asciidoctor)
 	if err != nil {
 		return core.NewE100(f.Path, err)
 	}
@@ -82,31 +88,10 @@ func (l *Linter) lintADoc(f *core.File) error {
 	return l.lintHTMLTokens(f, []byte(html), 0)
 }
 
-func callAdoc(_ *core.File, text, exe string, attrs map[string]string) (string, error) {
-	var out bytes.Buffer
-	var eut bytes.Buffer
-
-	var adocArgs = []string{
-		"-s",
-		"-a",
-		"notitle!",
-		"-a",
-		"attribute-missing=drop",
-	}
-
+func callAdoc(text, exe string, attrs map[string]string) (string, error) {
 	adocArgs = append(adocArgs, parseAttributes(attrs)...)
 	adocArgs = append(adocArgs, []string{"--safe-mode", "secure", "-"}...)
-
-	cmd := exec.Command(exe, adocArgs...)
-	cmd.Stdin = strings.NewReader(text)
-	cmd.Stdout = &out
-	cmd.Stderr = &eut
-
-	if err := cmd.Run(); err != nil {
-		return "", errors.New(eut.String())
-	}
-
-	return out.String(), nil
+	return system.ExecuteWithInput(exe, text, adocArgs...)
 }
 
 func parseAttributes(attrs map[string]string) []string {
