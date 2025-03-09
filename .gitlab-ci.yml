@@ -12,10 +12,11 @@ test:
 
     - apt-get -qq update
     - apt-get install -y curl gnupg build-essential default-jre
-    - apt-get install -y xsltproc zip unzip python3-pip ruby-full
+    - apt-get install -y xsltproc zip unzip python3-pip ruby-full nodejs npm
 
     - apt install -y python3-sphinx
     - gem install asciidoctor bundler
+    - npm install -g mdx2vast
 
     - wget https://github.com/dita-ot/dita-ot/releases/download/3.6/dita-ot-3.6.zip
     - unzip dita-ot-3.6.zip > /dev/null 2>&1

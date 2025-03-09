@@ -23,6 +23,7 @@ install:
 
   - pip install docutils
   - gem install asciidoctor
+  - npm install -g mdx2vast
 
   - choco install xsltproc
   # Git on AppVeyor includes a non-functional xsltproc. Remove this.
