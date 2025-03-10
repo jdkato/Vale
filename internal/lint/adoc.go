@@ -89,13 +89,16 @@ func (l *Linter) lintADoc(f *core.File) error {
 }
 
 func callAdoc(text, exe string, attrs map[string]string) (string, error) {
-	args := append(adocArgs, parseAttributes(attrs)...)
+	args := adocArgs
+
+	args = append(args, parseAttributes(attrs)...)
 	args = append(args, []string{"--safe-mode", "secure", "-"}...)
+
 	return system.ExecuteWithInput(exe, text, args...)
 }
 
 func parseAttributes(attrs map[string]string) []string {
-	var adocArgs []string
+	var args []string
 
 	for k, v := range attrs {
 		entry := fmt.Sprintf("%s=%s", k, v)
@@ -104,8 +107,8 @@ func parseAttributes(attrs map[string]string) []string {
 		} else if v == "NO" {
 			entry = k + "!"
 		}
-		adocArgs = append(adocArgs, []string{"-a", entry}...)
+		args = append(args, []string{"-a", entry}...)
 	}
 
-	return adocArgs
+	return args
 }
