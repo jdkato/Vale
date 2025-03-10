@@ -89,9 +89,9 @@ func (l *Linter) lintADoc(f *core.File) error {
 }
 
 func callAdoc(text, exe string, attrs map[string]string) (string, error) {
-	adocArgs = append(adocArgs, parseAttributes(attrs)...)
-	adocArgs = append(adocArgs, []string{"--safe-mode", "secure", "-"}...)
-	return system.ExecuteWithInput(exe, text, adocArgs...)
+	args := append(adocArgs, parseAttributes(attrs)...)
+	args = append(args, []string{"--safe-mode", "secure", "-"}...)
+	return system.ExecuteWithInput(exe, text, args...)
 }
 
 func parseAttributes(attrs map[string]string) []string {
